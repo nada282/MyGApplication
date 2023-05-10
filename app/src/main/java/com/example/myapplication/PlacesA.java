@@ -1,20 +1,15 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlacesA extends AppCompatActivity implements RecycleViewOnItemClick {
+public class PlacesA extends AppCompatActivity  {
 
     private List<Places> placesList = new ArrayList<>();
     private List<Places> Salons = new ArrayList<>();
@@ -31,9 +26,11 @@ public class PlacesA extends AppCompatActivity implements RecycleViewOnItemClick
 
         namee = findViewById(R.id.name);
         recyclerView = findViewById(R.id.dry);
-       // text = findViewById(R.id.text1);
+        // text = findViewById(R.id.text1);
+    }
+}
 
-        adapter = new Adapter2(Salons, this);
+     /*   adapter = new Adapter2(Salons, this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setAdapter(adapter);
 
@@ -57,10 +54,10 @@ public class PlacesA extends AppCompatActivity implements RecycleViewOnItemClick
 
       //  adapter.setData(placesList);
 
-        }
+        }*/
 
 
-    @Override
+ /*   @Override
     public void onItemClick(int position) {
 
     }
@@ -68,5 +65,5 @@ public class PlacesA extends AppCompatActivity implements RecycleViewOnItemClick
     @Override
     public void onLongItemClick(int position) {
 
-    }
-}
+    }*/
+//}

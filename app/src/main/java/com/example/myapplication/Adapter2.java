@@ -9,73 +9,73 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import com.bumptech.glide.Glide;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-public class Adapter2 extends RecyclerView.Adapter<Adapter2.ViewHolder>{
+public class Adapter2 extends FirebaseRecyclerAdapter<SalonClass, Adapter2.SalonViewHolder> {
 
+    private static RecycleViewOnItemClick mListener;
 
-    private List<Places> novelsModels;
-    private RecycleViewOnItemClick recycleViewOnItemClick;
+    /**
+     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
+     * {@link FirebaseRecyclerOptions} for configuration options.
+     *
+     * @param options
+     * @param salon
+     */
+    public Adapter2(@NonNull FirebaseRecyclerOptions<SalonClass> options, Salon salon) {
+        super(options);
+    }
 
-    public Adapter2(List<Places> novelsModels, RecycleViewOnItemClick recycleViewOnItemClick) {
-        this.novelsModels = novelsModels;
-        this.recycleViewOnItemClick = recycleViewOnItemClick;
+    @Override
+    protected void onBindViewHolder(@NonNull SalonViewHolder holder, int position, @NonNull SalonClass model) {
+        holder.bind(model);
+    }
+    public void cleanup() {
+        stopListening();
+
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.homecard_view, parent, false));
+    public SalonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.homecard_view, parent, false);
+        return new SalonViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.text.setText(novelsModels.get(position).getName());
+    public static class SalonViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        holder.image.setImageResource(novelsModels.get(position).getImageID());
-        holder.setIsRecyclable(true);
-    }
+        private ImageView mImageView;
+        private TextView mNameTextView;
 
-
-    public void setData(List<Places> placesList) {
-        novelsModels = placesList;
-        notifyDataSetChanged();
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return novelsModels.size();
-    }
-
-
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        private TextView text;
-        private ImageView image;
-
-        public ViewHolder(@NonNull View itemView) {
+        public SalonViewHolder(View itemView) {
             super(itemView);
+            mImageView = itemView.findViewById(R.id.image);
+            mNameTextView = itemView.findViewById(R.id.txtName);
 
-            text = itemView.findViewById(R.id.txtName);
-            image = itemView.findViewById(R.id.image);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    recycleViewOnItemClick.onItemClick(getAdapterPosition());
-                }
-            });
-
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    recycleViewOnItemClick.onLongItemClick(getAdapterPosition());
-                    return true;
-                }
-            });
-
+            itemView.setOnClickListener(this);
         }
+
+        public void bind(SalonClass salon) {
+            // Load the salon image using Glide or any other image loading library
+            Glide.with(mImageView.getContext())
+                    .load(salon.getImage())
+                    .into(mImageView);
+            mNameTextView.setText(salon.getName());
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION && mListener != null) {
+                mListener.onItemClick(position);
+            }
+        }
+    }
+
+    public interface RecycleViewOnItemClick {
+        void onItemClick(int position);
     }
 }

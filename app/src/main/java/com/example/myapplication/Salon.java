@@ -1,63 +1,94 @@
 package com.example.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class Salon extends AppCompatActivity implements  RecycleViewOnItemClick{
+import java.io.Serializable;
+
+
+public class Salon extends AppCompatActivity implements RecycleViewOnItemClick , Serializable {
     RecyclerView recyclerView,rec2;
     TextView trxt;
-    private List<Places> Salons = new ArrayList<>();
+    DatabaseReference mbase;
+    Adapter2 adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salon);
-         recyclerView = findViewById(R.id.Salon_recycler);
-
-
-
-        Salons.add(new Places("salon1", R.drawable.salon1));
-        Salons.add(new Places("salon2", R.drawable.salon2));
-        Salons.add(new Places("salon3", R.drawable.salon3));
-        Salons.add(new Places("salon4", R.drawable.salon4));
-
+        recyclerView = findViewById(R.id.Salon_recycler);
+        mbase = FirebaseDatabase.getInstance().getReference();
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        Adapter2 adapter = new Adapter2(Salons, this);
-        recyclerView.setAdapter(adapter);
+        FirebaseRecyclerOptions<SalonClass> options =
+                new FirebaseRecyclerOptions.Builder<SalonClass>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("salon"), SalonClass.class)
+                        .build();
 
+        try {
+            adapter = new Adapter2(options, this); // Set the listener to this activity
+            recyclerView.setAdapter(adapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Make sure to remove the listener to avoid memory leaks
+            if (adapter != null) {
+                adapter.cleanup();
+            }
+        }
     }
-
     @Override
     public void onItemClick(int position) {
 
-        Places selectedPlace = Salons.get(position);
+        System.out.print("raghaddddddddddddddddddd");
+        SalonClass selectedPlace = adapter.getItem(position);
         Intent intent;
         switch(selectedPlace.getName()) {
-            case "salon1":
+            case "Salon1":
                 intent = new Intent(this, Salon1.class);
                 break;
-            case "salon2":
+            case "Salon2":
                 intent = new Intent(this, Salon2.class);
                 break;
             // Add cases for other salons as required
             default:
                 return;
         }
-        intent.putExtra("place", selectedPlace);
+        intent.putExtra("place", String.valueOf(selectedPlace));
+
         startActivity(intent);
-        }
+    }
+
+    @Override protected void onStart()
+    {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    // Function to tell the app to stop getting
+    // data from database on stopping of the activity
+    @Override protected void onStop()
+    {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+
+
+
+
+
 
 
 
@@ -65,4 +96,6 @@ public class Salon extends AppCompatActivity implements  RecycleViewOnItemClick{
     public void onLongItemClick(int position) {
 
     }
+
+
 }
