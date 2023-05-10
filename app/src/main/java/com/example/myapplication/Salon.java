@@ -2,25 +2,20 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.Serializable;
-
-
-public class Salon extends AppCompatActivity implements RecycleViewOnItemClick , Serializable {
-    RecyclerView recyclerView,rec2;
-    TextView trxt;
+public class Salon extends AppCompatActivity {
+    RecyclerView recyclerView;
     DatabaseReference mbase;
     Adapter2 adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,48 +23,34 @@ public class Salon extends AppCompatActivity implements RecycleViewOnItemClick ,
         setContentView(R.layout.activity_salon);
         recyclerView = findViewById(R.id.Salon_recycler);
         mbase = FirebaseDatabase.getInstance().getReference();
-
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         FirebaseRecyclerOptions<SalonClass> options =
                 new FirebaseRecyclerOptions.Builder<SalonClass>()
                         .setQuery(FirebaseDatabase.getInstance().getReference().child("salon"), SalonClass.class)
                         .build();
+        adapter = new Adapter2(options);
+        recyclerView.setAdapter(adapter);
 
-        try {
-            adapter = new Adapter2(options, this); // Set the listener to this activity
-            recyclerView.setAdapter(adapter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Make sure to remove the listener to avoid memory leaks
-            if (adapter != null) {
-                adapter.cleanup();
+        setupAdapterClickListener();
+    }
+
+    private void setupAdapterClickListener() {
+        adapter.setOnItemClickListener(new Adapter2.OnItemClickListener() {
+            @Override
+            public void onItemClick(DataSnapshot snapshot, int position) {
+                SalonClass salon = snapshot.getValue(SalonClass.class);
+
+                Intent intent = new Intent(Salon.this, PlaceDetails.class);
+                intent.putExtra("salon_id", snapshot.getKey());
+                intent.putExtra("salon_name", salon.getName());
+                intent.putExtra("salon_image", salon.getImage());
+                // Add any other necessary data as extras
+
+                startActivity(intent);
             }
-        }
+        });
     }
-    @Override
-    public void onItemClick(int position) {
-
-        System.out.print("raghaddddddddddddddddddd");
-        SalonClass selectedPlace = adapter.getItem(position);
-        Intent intent;
-        switch(selectedPlace.getName()) {
-            case "Salon1":
-                intent = new Intent(this, Salon1.class);
-                break;
-            case "Salon2":
-                intent = new Intent(this, Salon2.class);
-                break;
-            // Add cases for other salons as required
-            default:
-                return;
-        }
-        intent.putExtra("place", String.valueOf(selectedPlace));
-
-        startActivity(intent);
-    }
-
     @Override protected void onStart()
     {
         super.onStart();
@@ -82,19 +63,6 @@ public class Salon extends AppCompatActivity implements RecycleViewOnItemClick ,
     {
         super.onStop();
         adapter.stopListening();
-    }
-
-
-
-
-
-
-
-
-
-    @Override
-    public void onLongItemClick(int position) {
-
     }
 
 

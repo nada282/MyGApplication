@@ -16,7 +16,7 @@
             android:name=".Salon2"
             android:exported="false" />
         <activity
-            android:name=".Salon1"
+            android:name=".PlaceDetails"
             android:exported="false" />
         <activity
             android:name=".Dorms"

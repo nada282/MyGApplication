@@ -12,29 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 
 public class Adapter2 extends FirebaseRecyclerAdapter<SalonClass, Adapter2.SalonViewHolder> {
 
-    private static RecycleViewOnItemClick mListener;
+    private OnItemClickListener listener;
 
-    /**
-     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
-     * {@link FirebaseRecyclerOptions} for configuration options.
-     *
-     * @param options
-     * @param salon
-     */
-    public Adapter2(@NonNull FirebaseRecyclerOptions<SalonClass> options, Salon salon) {
+    public Adapter2(@NonNull FirebaseRecyclerOptions<SalonClass> options) {
         super(options);
+
     }
 
     @Override
     protected void onBindViewHolder(@NonNull SalonViewHolder holder, int position, @NonNull SalonClass model) {
         holder.bind(model);
-    }
-    public void cleanup() {
-        stopListening();
-
     }
 
     @NonNull
@@ -45,10 +37,19 @@ public class Adapter2 extends FirebaseRecyclerAdapter<SalonClass, Adapter2.Salon
         return new SalonViewHolder(view);
     }
 
-    public static class SalonViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public void cleanup() {
+        stopListening();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public class SalonViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView mImageView;
         private TextView mNameTextView;
+        private DatabaseReference salonRef;
 
         public SalonViewHolder(View itemView) {
             super(itemView);
@@ -59,7 +60,6 @@ public class Adapter2 extends FirebaseRecyclerAdapter<SalonClass, Adapter2.Salon
         }
 
         public void bind(SalonClass salon) {
-            // Load the salon image using Glide or any other image loading library
             Glide.with(mImageView.getContext())
                     .load(salon.getImage())
                     .into(mImageView);
@@ -69,13 +69,13 @@ public class Adapter2 extends FirebaseRecyclerAdapter<SalonClass, Adapter2.Salon
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION && mListener != null) {
-                mListener.onItemClick(position);
+            if (position != RecyclerView.NO_POSITION && listener != null) {
+                listener.onItemClick(getSnapshots().getSnapshot(position), position);
             }
         }
     }
 
-    public interface RecycleViewOnItemClick {
-        void onItemClick(int position);
+    public interface OnItemClickListener {
+        void onItemClick(DataSnapshot snapshot, int position);
     }
 }
