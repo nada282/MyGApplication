@@ -1,16 +1,7 @@
 package com.example.myapplication;
 
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.Manifest;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,6 +11,14 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,8 +32,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private BottomNavigationView bottom;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
-    private List<Places> novelsModels = new ArrayList<>();
-    private List<Places> placesList = new ArrayList<>();
+    private List<PlacesClass> novelsModels = new ArrayList<>();
+    private List<PlacesClass> placesList = new ArrayList<>();
 
 
 
@@ -78,11 +77,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
 
-        novelsModels.add(new Places("DryClean", R.drawable.dry));
-        novelsModels.add(new Places("SuperMarket", R.drawable.market));
-        novelsModels.add(new Places("Dorms", R.drawable.dorms));
-        novelsModels.add(new Places("Resturant", R.drawable.resturant));
-        novelsModels.add(new Places("Salon", R.drawable.salon));
+  /*   novelsModels.add(new PlacesClass("DryClean", R.drawable.dry));
+        novelsModels.add(new PlacesClass("SuperMarket", R.drawable.market));
+        novelsModels.add(new PlacesClass("Dorms", R.drawable.dorms));
+        novelsModels.add(new PlacesClass("Resturant", R.drawable.resturant));
+        novelsModels.add(new PlacesClass("Salon", R.drawable.salon));*/
 
 
 

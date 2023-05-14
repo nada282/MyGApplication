@@ -2,8 +2,25 @@ package com.example.myapplication;
 
 public class SalonClass {
 
-    String Name, image;
+    String Name, image,description;
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    double price;
     public SalonClass() {
     }
 

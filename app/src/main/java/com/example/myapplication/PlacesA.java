@@ -11,11 +11,11 @@ import java.util.List;
 
 public class PlacesA extends AppCompatActivity  {
 
-    private List<Places> placesList = new ArrayList<>();
-    private List<Places> Salons = new ArrayList<>();
+    private List<PlacesClass> placesList = new ArrayList<>();
+    private List<PlacesClass> Salons = new ArrayList<>();
 
 
-    Adapter2 adapter;
+    ItemListAdapter adapter;
     private RecyclerView recyclerView;
     private TextView namee, text;
 

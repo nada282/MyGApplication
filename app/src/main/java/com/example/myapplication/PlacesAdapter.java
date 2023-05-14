@@ -13,21 +13,22 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 
-public class Adapter2 extends FirebaseRecyclerAdapter<SalonClass, Adapter2.SalonViewHolder> {
+public class PlacesAdapter extends FirebaseRecyclerAdapter<PlacesClass, PlacesAdapter.SalonViewHolder> {
 
     private OnItemClickListener listener;
 
-    public Adapter2(@NonNull FirebaseRecyclerOptions<SalonClass> options) {
+    public PlacesAdapter(@NonNull FirebaseRecyclerOptions<PlacesClass> options) {
         super(options);
-
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull SalonViewHolder holder, int position, @NonNull SalonClass model) {
+    protected void onBindViewHolder(@NonNull SalonViewHolder holder, int position, @NonNull PlacesClass model) {
         holder.bind(model);
+
     }
+
+
 
     @NonNull
     @Override
@@ -35,10 +36,6 @@ public class Adapter2 extends FirebaseRecyclerAdapter<SalonClass, Adapter2.Salon
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.homecard_view, parent, false);
         return new SalonViewHolder(view);
-    }
-
-    public void cleanup() {
-        stopListening();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -49,7 +46,7 @@ public class Adapter2 extends FirebaseRecyclerAdapter<SalonClass, Adapter2.Salon
 
         private ImageView mImageView;
         private TextView mNameTextView;
-        private DatabaseReference salonRef;
+
 
         public SalonViewHolder(View itemView) {
             super(itemView);
@@ -59,7 +56,7 @@ public class Adapter2 extends FirebaseRecyclerAdapter<SalonClass, Adapter2.Salon
             itemView.setOnClickListener(this);
         }
 
-        public void bind(SalonClass salon) {
+        public void bind(PlacesClass salon) {
             Glide.with(mImageView.getContext())
                     .load(salon.getImage())
                     .into(mImageView);
@@ -67,7 +64,7 @@ public class Adapter2 extends FirebaseRecyclerAdapter<SalonClass, Adapter2.Salon
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION && listener != null) {
                 listener.onItemClick(getSnapshots().getSnapshot(position), position);

@@ -15,7 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class Salon extends AppCompatActivity {
     RecyclerView recyclerView;
     DatabaseReference mbase;
-    Adapter2 adapter;
+    PlacesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,45 +25,45 @@ public class Salon extends AppCompatActivity {
         mbase = FirebaseDatabase.getInstance().getReference();
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        FirebaseRecyclerOptions<SalonClass> options =
-                new FirebaseRecyclerOptions.Builder<SalonClass>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("salon"), SalonClass.class)
+        FirebaseRecyclerOptions<PlacesClass> options =
+                new FirebaseRecyclerOptions.Builder<PlacesClass>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("salon"), PlacesClass.class)
                         .build();
-        adapter = new Adapter2(options);
+        adapter = new PlacesAdapter(options);
         recyclerView.setAdapter(adapter);
 
         setupAdapterClickListener();
     }
 
     private void setupAdapterClickListener() {
-        adapter.setOnItemClickListener(new Adapter2.OnItemClickListener() {
+        adapter.setOnItemClickListener(new PlacesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DataSnapshot snapshot, int position) {
-                SalonClass salon = snapshot.getValue(SalonClass.class);
 
-                Intent intent = new Intent(Salon.this, PlaceDetails.class);
+                PlacesClass salon = snapshot.getValue(PlacesClass.class);
+
+                Intent intent = new Intent(Salon.this, PlacesList.class);
                 intent.putExtra("salon_id", snapshot.getKey());
                 intent.putExtra("salon_name", salon.getName());
                 intent.putExtra("salon_image", salon.getImage());
-                // Add any other necessary data as extras
 
+                // Add any other necessary data as extras
                 startActivity(intent);
             }
         });
     }
-    @Override protected void onStart()
-    {
+
+    @Override
+    protected void onStart() {
         super.onStart();
         adapter.startListening();
     }
 
     // Function to tell the app to stop getting
     // data from database on stopping of the activity
-    @Override protected void onStop()
-    {
+    @Override
+    protected void onStop() {
         super.onStop();
         adapter.stopListening();
     }
-
-
 }

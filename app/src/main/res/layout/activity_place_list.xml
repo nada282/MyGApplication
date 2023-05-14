@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
 
     android:background="@drawable/top_background"
-    tools:context=".PlaceDetails">
+    tools:context=".PlacesList">
 
     <RelativeLayout
         android:id="@+id/toolBar"
@@ -33,38 +33,19 @@
             android:layout_below="@+id/title"
             android:text="search" />
 
+
     </RelativeLayout>
 
-
-    <RelativeLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/placeList_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/top_background"
+        android:scrollbars="vertical"
+        android:padding="2dp"
+        />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_marginTop="100dp"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:id="@+id/nameTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/imageView"
-            android:padding="16dp"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/addressTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/nameTextView"
-            android:padding="16dp"
-            android:textSize="18sp" />
-
-    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
