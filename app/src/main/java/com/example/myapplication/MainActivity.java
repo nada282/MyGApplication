@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottom = findViewById(R.id.bottom);
 
 
-
+        bottom.setOnNavigationItemSelectedListener(this);
 
       /*  toggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.start,R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();*/
 
-        bottom.setOnNavigationItemSelectedListener(this);
+
 
 
         findViewById(R.id.menu).setOnClickListener(new View.OnClickListener() {

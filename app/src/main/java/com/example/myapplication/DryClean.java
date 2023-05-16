@@ -6,34 +6,83 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DryClean extends AppCompatActivity implements  RecycleViewOnItemClick{
+public class DryClean extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private List<PlacesClass> dry_clean = new ArrayList<>();
+    private BottomNavigationView bottom;
+    RecyclerView recyclerView;
+    DatabaseReference mbase;
+    PlacesAdapter adapter;
+    private List<PlacesClass> dryclean = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dry_clean_click);
         RecyclerView recyclerView = findViewById(R.id.dry_clean_recycler);
+        mbase = FirebaseDatabase.getInstance().getReference();
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-      /*  dry_clean.add(new PlacesClass("dry-clean1", R.drawable.dryclean1));
-        dry_clean.add(new PlacesClass("dry-clean2", R.drawable.dryclean2));
-        dry_clean .add(new PlacesClass("dry-clean3", R.drawable.dryclean3));
-        dry_clean .add(new PlacesClass("dry-clean4", R.drawable.dryclean4));*/
+        FirebaseRecyclerOptions<PlacesClass> options =
+                new FirebaseRecyclerOptions.Builder<PlacesClass>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("DryClean"), PlacesClass.class)
+                        .build();
+        adapter = new PlacesAdapter(options);
+        recyclerView.setAdapter(adapter);
+
+        setupAdapterClickListener();
+
+        bottom = findViewById(R.id.bottom);
+        BottomNavigationView nav1 = findViewById(R.id.bottom);
+        nav1.setItemIconTintList(null);
 
 
-
-      /*  recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-        Adapter1 adapter = new Adapter1(dry_clean , this);
-        recyclerView.setAdapter(adapter);*/
+        bottom.setOnNavigationItemSelectedListener(this);
     }
 
+    private void setupAdapterClickListener() {
+        adapter.setOnItemClickListener(new PlacesAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DataSnapshot snapshot, int position) {
 
+                PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+
+                Intent intent = new Intent(DryClean.this,DryCleanList.class);
+                intent.putExtra("dryclean_id", snapshot.getKey());
+                intent.putExtra("dryclean_name", supermarket.getName());
+                intent.putExtra("dryclean_image", supermarket.getImage());
+
+                // Add any other necessary data as extras
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    // Function to tell the app to stop getting
+    // data from database on stopping of the activity
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch(id){
@@ -49,19 +98,7 @@ public class DryClean extends AppCompatActivity implements  RecycleViewOnItemCli
                 Intent in2 = new Intent (this,Profile.class);
                 startActivity(in2);
                 return true;
-
         }
         return false;
-
-    }
-
-    @Override
-    public void onItemClick(int position) {
-
-    }
-
-    @Override
-    public void onLongItemClick(int position) {
-
     }
 }

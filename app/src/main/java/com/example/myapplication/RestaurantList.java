@@ -6,38 +6,48 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
-public class Salon extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class RestaurantList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private BottomNavigationView bottom;
-    RecyclerView recyclerView;
-    DatabaseReference mbase;
-    PlacesAdapter adapter;
+    private RecyclerView recyclerView;
+    private ItemListAdapter adapter;
+    private DatabaseReference servicesRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_salon);
-        recyclerView = findViewById(R.id.Salon_recycler);
-        mbase = FirebaseDatabase.getInstance().getReference();
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        setContentView(R.layout.activity_restaurant_list);
+        recyclerView = findViewById(R.id.RestaurantList_recycler);
 
-        FirebaseRecyclerOptions<PlacesClass> options =
-                new FirebaseRecyclerOptions.Builder<PlacesClass>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("salon"), PlacesClass.class)
+        // Get the details of the selected salon from the intent
+        Intent intent = getIntent();
+        String restaurantId = intent.getStringExtra("restaurant_id");
+        String restaurantName = intent.getStringExtra("restaurant_name");
+        String restaurantImageUrl = intent.getStringExtra("restaurant_image");
+
+        // Set the title of the action bar to the name of the selected salon
+
+        // Construct the database reference for the services of the selected Restaurant
+        servicesRef = FirebaseDatabase.getInstance().getReference().child("Items");
+        Query query = servicesRef.orderByChild("Resturant").equalTo(restaurantName);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        FirebaseRecyclerOptions<ServicesClass> options =
+                new FirebaseRecyclerOptions.Builder<ServicesClass>()
+                        .setQuery(query, ServicesClass.class)
                         .build();
-        adapter = new PlacesAdapter(options);
-        recyclerView.setAdapter(adapter);
 
-        setupAdapterClickListener();
+        adapter = new ItemListAdapter(options);
+        recyclerView.setAdapter(adapter);
+        // Create a FirebaseRecyclerOptions object for the adapter
 
         bottom = findViewById(R.id.bottom);
         BottomNavigationView nav1 = findViewById(R.id.bottom);
@@ -45,25 +55,11 @@ public class Salon extends AppCompatActivity implements BottomNavigationView.OnN
 
 
         bottom.setOnNavigationItemSelectedListener(this);
+        // Create a new instance of ItemListAdapter and set it as the adapter for the RecyclerView
+
     }
 
-    private void setupAdapterClickListener() {
-        adapter.setOnItemClickListener(new PlacesAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DataSnapshot snapshot, int position) {
 
-                PlacesClass salon = snapshot.getValue(PlacesClass.class);
-
-                Intent intent = new Intent(Salon.this, SalonList.class);
-                intent.putExtra("salon_id", snapshot.getKey());
-                intent.putExtra("salon_name", salon.getName());
-                intent.putExtra("salon_image", salon.getImage());
-
-                // Add any other necessary data as extras
-                startActivity(intent);
-            }
-        });
-    }
 
     @Override
     protected void onStart() {
@@ -71,8 +67,6 @@ public class Salon extends AppCompatActivity implements BottomNavigationView.OnN
         adapter.startListening();
     }
 
-    // Function to tell the app to stop getting
-    // data from database on stopping of the activity
     @Override
     protected void onStop() {
         super.onStop();

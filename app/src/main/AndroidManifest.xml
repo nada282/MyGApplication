@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:name="android.permission.ACCESS_FINE_LOCATION">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -13,10 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".DryCleanList"
+            android:exported="false" />
+        <activity
+            android:name=".RestaurantList"
+            android:exported="false" />
+        <activity
+            android:name=".SupermarketItemList"
+            android:exported="false" />
+        <activity
             android:name=".Salon2"
             android:exported="false" />
         <activity
-            android:name=".PlacesList"
+            android:name=".SalonList"
             android:exported="false" />
         <activity
             android:name=".Dorms"

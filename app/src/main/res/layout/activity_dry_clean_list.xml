@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/top_background"
-    tools:context=".Restaurant">
+    tools:context=".DryCleanList">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom"
@@ -16,6 +16,7 @@
         app:menu="@menu/bottom_nav"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
 
     <RelativeLayout
         android:id="@+id/toolBar"
@@ -41,14 +42,18 @@
             android:layout_below="@+id/title"
             android:text="search" />
 
+
     </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rest_recycler"
+        android:id="@+id/DrycleanList_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
-        android:scrollbars="vertical">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:background="@drawable/top_background"
+        android:scrollbars="vertical"
+        android:padding="2dp"
+        />
 
 
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/top_background"
-    tools:context=".Restaurant">
+    tools:context=".SupermarketItemList">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom"
@@ -41,15 +41,19 @@
             android:layout_below="@+id/title"
             android:text="search" />
 
+
     </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rest_recycler"
+        android:id="@+id/SupermarketItemList_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="100dp"
-        android:scrollbars="vertical">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:background="@drawable/top_background"
+        android:scrollbars="vertical"
+        android:padding="2dp"
+        />
 
-
+/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

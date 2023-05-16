@@ -5,9 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:background="@drawable/top_background"
     tools:context=".SuperMarket">
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:menu="@menu/bottom_nav"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <RelativeLayout
         android:id="@+id/toolBar"
@@ -47,14 +55,5 @@
 
 
     </androidx.recyclerview.widget.RecyclerView>
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom"
-        android:layout_width="391dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        app:menu="@menu/bottom_nav"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="659dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
