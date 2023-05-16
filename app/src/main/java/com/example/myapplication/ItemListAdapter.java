@@ -34,7 +34,7 @@ public class ItemListAdapter extends FirebaseRecyclerAdapter<ServicesClass, Item
     @Override
     public SalonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.homecard_view, parent, false);
+                .inflate(R.layout.item_list, parent, false);
         return new SalonViewHolder(view);
     }
 
@@ -57,10 +57,10 @@ public class ItemListAdapter extends FirebaseRecyclerAdapter<ServicesClass, Item
 
         public SalonViewHolder(View itemView) {
             super(itemView);
-            serviceimage = itemView.findViewById(R.id.image);
-            name = itemView.findViewById(R.id.txtName);
-            price=itemView.findViewById(R.id.price);
-            desc =itemView.findViewById(R.id.description);
+            serviceimage = itemView.findViewById(R.id.productImage);
+            name = itemView.findViewById(R.id.productName);
+            price=itemView.findViewById(R.id.productPrice);
+        //    desc =itemView.findViewById(R.id.description);
 
             itemView.setOnClickListener(this);
         }
@@ -72,7 +72,7 @@ public class ItemListAdapter extends FirebaseRecyclerAdapter<ServicesClass, Item
             name.setText(salon.getName());
             price.setText(salon.getPrice()+"");
 
-            desc.setText(salon.getDescription());
+       //     desc.setText(salon.getDescription());
         }
 
         @Override
