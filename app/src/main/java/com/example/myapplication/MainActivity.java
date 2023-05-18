@@ -5,11 +5,13 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,8 +47,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ImageView v = findViewById(R.id.slide);
+        AnimationDrawable u = (AnimationDrawable) v.getDrawable();
+        u.start();
 
-      //  RecyclerView recyclerView = findViewById(R.id.place_recycler);
+
+        //  RecyclerView recyclerView = findViewById(R.id.place_recycler);
         final DrawerLayout drawerLayout = findViewById(R.id.DrawerLayout);
         //  final BottomNavigationView bottom=findViewById(R.id.bottom_nav);
         //  navigationView=findViewById(R.id.navigation);
