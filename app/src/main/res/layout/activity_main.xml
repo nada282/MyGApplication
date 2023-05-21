@@ -83,164 +83,231 @@
 
         </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="410dp"
-        android:layout_height="490dp"
-        android:layout_gravity="center"
-
-        android:gravity="center"
-        android:orientation="horizontal">
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card1"
-        android:layout_width="138dp"
-        android:layout_marginTop="130dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:onClick="salonclick"
-        tools:ignore="SpeakableTextPresentCheck">
-
-        <ImageView
-            android:id="@+id/salonimage"
-            android:layout_width="100dp"
-            android:layout_height="130dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/salon" />
+<!--        <HorizontalScrollView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content">-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="410dp"-->
+<!--        android:layout_height="490dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal">-->
 
 
-    </androidx.cardview.widget.CardView>
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/card1"-->
+<!--        android:layout_width="138dp"-->
+<!--        android:layout_marginTop="130dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:onClick="salonclick"-->
+<!--        tools:ignore="SpeakableTextPresentCheck">-->
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card2"
-        android:layout_width="138dp"
-        android:layout_marginTop="130dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="30dp"
-        android:onClick="superMarketclick"
-        tools:ignore="SpeakableTextPresentCheck">
+<!--        <ImageView-->
+<!--            android:id="@+id/salonimage"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="130dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:src="@drawable/salon" />-->
 
 
-            <ImageView
-                android:id="@+id/superimage"
-                android:layout_width="100dp"
-                android:layout_height="130dp"
+<!--    </androidx.cardview.widget.CardView>-->
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/card2"-->
+<!--        android:layout_width="138dp"-->
+<!--        android:layout_marginTop="130dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginLeft="30dp"-->
+<!--        android:onClick="superMarketclick"-->
+<!--        tools:ignore="SpeakableTextPresentCheck">-->
+
+
+<!--            <ImageView-->
+<!--                android:id="@+id/superimage"-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="130dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:src="@drawable/market" />-->
+<!--    </androidx.cardview.widget.CardView>-->
+
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/card3"-->
+<!--            android:layout_width="138dp"-->
+<!--            android:layout_marginTop="130dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginLeft="30dp"-->
+<!--            android:onClick="DryCleanClick"-->
+<!--            tools:ignore="SpeakableTextPresentCheck">-->
+
+
+<!--            <ImageView-->
+<!--                android:id="@+id/dryimage"-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="130dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:src="@drawable/dd" />-->
+
+
+<!--        </androidx.cardview.widget.CardView>-->
+<!--        -->
+<!--        </LinearLayout>-->
+<!--        </HorizontalScrollView>-->
+
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+<!--            tools:layout_editor_absoluteX="dp"-->
+<!--            tools:layout_editor_absoluteY="16dp">-->
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="410dp"
+                android:layout_height="540dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/market" />
+                android:layout_marginBottom="200dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
 
-
-
-
-    </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card3"
-            android:layout_width="138dp"
-            android:layout_marginTop="130dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
-            android:onClick="DryCleanClick"
-            tools:ignore="SpeakableTextPresentCheck">
-
-
-            <ImageView
-                android:id="@+id/dryimage"
-                android:layout_width="100dp"
-                android:layout_height="130dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/dd" />
-
-
-
-
-
-        </androidx.cardview.widget.CardView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="410dp"
-            android:layout_height="690dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card4"
-                android:layout_width="138dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="200dp"
-                android:onClick="ResturantClick"
-                tools:ignore="SpeakableTextPresentCheck">
-
-                <ImageView
-                    android:id="@+id/resturantimage"
-                    android:layout_width="100dp"
-                    android:layout_height="130dp"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card1"
+                    android:layout_width="138dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/resturant" />
+                    android:layout_marginLeft="464dp"
+                    android:layout_marginTop="200dp"
+                    android:onClick="salonclick"
+                    tools:ignore="SpeakableTextPresentCheck">
+
+                                    <ImageView
+                                        android:id="@+id/salonimage"
+                                        android:layout_width="100dp"
+                                        android:layout_height="130dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="10dp"
+                                        android:src="@drawable/salon" />
+                                </androidx.cardview.widget.CardView>
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/card2"
+                                    android:layout_width="138dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="200dp"
+                                    android:onClick="superMarketclick"
+                                    tools:ignore="SpeakableTextPresentCheck">
 
 
-            </androidx.cardview.widget.CardView>
+                                    <ImageView
+                                        android:id="@+id/superimage"
+                                        android:layout_width="100dp"
+                                        android:layout_height="130dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="10dp"
+                                        android:src="@drawable/market" />
+                                </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card5"
-                android:layout_width="138dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="200dp"
-                android:onClick="DormsClick"
-                tools:ignore="SpeakableTextPresentCheck">
-
-                <ImageView
-                    android:id="@+id/dormsimage"
-                    android:layout_width="100dp"
-                    android:layout_height="130dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/dorms4" />
-
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card6"
-                android:layout_width="138dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="200dp"
-                android:onClick="StudyClick"
-                tools:ignore="SpeakableTextPresentCheck">
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/card3"
+                                    android:layout_width="138dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="200dp"
+                                    android:onClick="DryCleanClick"
+                                    tools:ignore="SpeakableTextPresentCheck">
 
 
-                <ImageView
-                    android:id="@+id/studyimage"
-                    android:layout_width="100dp"
-                    android:layout_height="130dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/study"
-                    />
+                                    <ImageView
+                                        android:id="@+id/dryimage"
+                                        android:layout_width="100dp"
+                                        android:layout_height="130dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="10dp"
+                                        android:src="@drawable/dd" />
 
 
-            </androidx.cardview.widget.CardView>
+                                </androidx.cardview.widget.CardView>
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/card4"
+                                    android:layout_width="138dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="200dp"
+                                    android:onClick="ResturantClick"
+                                    tools:ignore="SpeakableTextPresentCheck">
+
+                                    <ImageView
+                                        android:id="@+id/resturantimage"
+                                        android:layout_width="100dp"
+                                        android:layout_height="130dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="10dp"
+                                        android:src="@drawable/resturant" />
 
 
-        </LinearLayout>
+                                </androidx.cardview.widget.CardView>
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/card5"
+                                    android:layout_width="138dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="200dp"
+                                    android:onClick="DormsClick"
+                                    tools:ignore="SpeakableTextPresentCheck">
+
+                                    <ImageView
+                                        android:id="@+id/dormsimage"
+                                        android:layout_width="100dp"
+                                        android:layout_height="130dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="10dp"
+                                        android:src="@drawable/dorms4" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                                </androidx.cardview.widget.CardView>
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/card6"
+                                    android:layout_width="138dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="200dp"
+                                    android:onClick="StudyClick"
+                                    tools:ignore="SpeakableTextPresentCheck">
+
+
+                                    <ImageView
+                                        android:id="@+id/studyimage"
+                                        android:layout_width="100dp"
+                                        android:layout_height="130dp"
+                                        android:layout_gravity="center"
+                                        android:layout_marginTop="10dp"
+                                        android:src="@drawable/study" />
+
+
+                                </androidx.cardview.widget.CardView>
+
+
+                            </LinearLayout>
+                        </HorizontalScrollView>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.drawerlayout.widget.DrawerLayout>
 
 
 
