@@ -11,11 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-public class DryCleanList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class DryCleanList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener ,ItemListAdapter.OnItemClickListener{
 
     private BottomNavigationView bottom;
     private RecyclerView recyclerView;
@@ -47,6 +48,8 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
 
         adapter = new ItemListAdapter(options);
         recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(this);
+
         // Create a FirebaseRecyclerOptions object for the adapter
 
         bottom = findViewById(R.id.bottom);
@@ -91,5 +94,20 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void onItemClick(DataSnapshot snapshot, int position) {
+        ServicesClass salon = snapshot.getValue(ServicesClass.class);
+
+        Intent intent = new Intent(DryCleanList.this, ServiceDetails.class);
+        intent.putExtra("id", snapshot.getKey());
+        intent.putExtra("name", salon.getName());
+        intent.putExtra("price", salon.getPrice());
+        intent.putExtra("desc", salon.getDescription());
+        intent.putExtra("image", salon.getImage());
+
+        // Add any other necessary data as extras
+        startActivity(intent);
     }
 }

@@ -25,10 +25,7 @@ public class ItemListAdapter extends FirebaseRecyclerAdapter<ServicesClass, Item
     @Override
     protected void onBindViewHolder(@NonNull SalonViewHolder holder, int position, @NonNull ServicesClass model) {
         holder.bind(model);
-
     }
-
-
 
     @NonNull
     @Override
@@ -42,25 +39,19 @@ public class ItemListAdapter extends FirebaseRecyclerAdapter<ServicesClass, Item
         this.listener = listener;
     }
 
-    public void clearItems() {
-    }
-
     public class SalonViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView serviceimage;
         private TextView name;
         private TextView price;
-        private TextView desc;
-
-
-
+        // Add more TextViews or views as needed
 
         public SalonViewHolder(View itemView) {
             super(itemView);
             serviceimage = itemView.findViewById(R.id.productImage);
             name = itemView.findViewById(R.id.productName);
-            price=itemView.findViewById(R.id.productPrice);
-        //    desc =itemView.findViewById(R.id.description);
+            price = itemView.findViewById(R.id.productPrice);
+            // Initialize more TextViews or views as needed
 
             itemView.setOnClickListener(this);
         }
@@ -70,9 +61,8 @@ public class ItemListAdapter extends FirebaseRecyclerAdapter<ServicesClass, Item
                     .load(salon.getImage())
                     .into(serviceimage);
             name.setText(salon.getName());
-            price.setText(salon.getPrice()+"");
-
-       //     desc.setText(salon.getDescription());
+            price.setText(String.valueOf(salon.getPrice()));
+            // Set values for more TextViews or views as needed
         }
 
         @Override

@@ -2,6 +2,11 @@ package com.example.myapplication;
 
 public class ServicesClass {
 
+    public int getId() {
+        return id;
+    }
+
+    private int id;
     private String name;
     private String image;
     private double price;
@@ -9,7 +14,8 @@ public class ServicesClass {
 
     public ServicesClass() {}
 
-    public ServicesClass(String name, String image, double price, String description) {
+    public ServicesClass(int id,String name, String image, double price, String description) {
+        this.id=id;
         this.name = name;
         this.image = image;
         this.price = price;

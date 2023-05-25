@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".ServiceDetails"
+            android:exported="false" />
+        <activity
             android:name=".DryCleanList"
             android:exported="false" />
         <activity

@@ -11,11 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-public class SalonList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class SalonList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ItemListAdapter.OnItemClickListener {
 
     private BottomNavigationView bottom;
     private RecyclerView recyclerView;
@@ -47,21 +48,15 @@ public class SalonList extends AppCompatActivity implements BottomNavigationView
                         .build();
 
         adapter = new ItemListAdapter(options);
+        adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
-        // Create a FirebaseRecyclerOptions object for the adapter
 
         bottom = findViewById(R.id.bottom);
         BottomNavigationView nav1 = findViewById(R.id.bottom);
         nav1.setItemIconTintList(null);
 
-
         bottom.setOnNavigationItemSelectedListener(this);
-
-        // Create a new instance of ItemListAdapter and set it as the adapter for the RecyclerView
-
     }
-
-
 
     @Override
     protected void onStart() {
@@ -78,20 +73,41 @@ public class SalonList extends AppCompatActivity implements BottomNavigationView
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch(id){
+        switch (id) {
             case R.id.home:
-                Intent in = new Intent (this,MainActivity.class);
+                Intent in = new Intent(this, MainActivity.class);
                 startActivity(in);
                 return true;
             case R.id.map:
-                Intent in1 = new Intent (this,Map.class);
+                Intent in1 = new Intent(this, Map.class);
                 startActivity(in1);
                 return true;
             case R.id.profile:
-                Intent in2 = new Intent (this,Profile.class);
+                Intent in2 = new Intent(this, Profile.class);
                 startActivity(in2);
                 return true;
         }
         return false;
     }
+
+
+    @Override
+    public void onItemClick(DataSnapshot snapshot, int position) {
+        ServicesClass salon = snapshot.getValue(ServicesClass.class);
+
+        Intent intent = new Intent(SalonList.this, ServiceDetails.class);
+        intent.putExtra("id", snapshot.getKey());
+        intent.putExtra("name", salon.getName());
+        intent.putExtra("price", salon.getPrice());
+        intent.putExtra("desc", salon.getDescription());
+        intent.putExtra("image", salon.getImage());
+
+        // Add any other necessary data as extras
+        startActivity(intent);
+    }
+
+
+
+
+
 }
