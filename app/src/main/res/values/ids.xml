@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="textName" type="id" />
+    <item name="imageView6" type="id" />
+    <item name="textLocation" type="id" />
+    <item name="textDob" type="id" />
+    <item name="textEmail" type="id" />
+    <item name="textPassword" type="id" />
+</resources>

@@ -21,4 +21,6 @@
     <string name="submit">SUBMIT</string>
     <string name="back">BACK</string>
     <string name="title_activity_map">title_activity_map</string>
+    <string name="Gender">"\n "</string>
+    <string name="date_of_birth_dd_mm_yy" />
 </resources>

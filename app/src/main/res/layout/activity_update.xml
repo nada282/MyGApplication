@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Update"
+    android:background="@drawable/top_background">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_margin="15dp"
+        >
+
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Name "
+            android:textColor="@color/white_greyish"
+            android:textSize="16sp"
+            tools:ignore="MissingPrefix" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditName"
+            android:layout_below="@id/textName"
+            android:padding="6dp"
+            android:inputType="textPersonName"
+            android:textSize="16sp"
+            android:hint="Enter new Name "
+            android:textColorHint="@color/white_greyish"
+            />
+        <TextView
+            android:id="@+id/textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="30dp"
+            android:text="passowrd "
+            android:layout_below="@id/EditName"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:ignore="MissingPrefix" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/EditPassword"
+            android:layout_below="@id/textPassword"
+            android:padding="6dp"
+            android:inputType="textPassword"
+            android:textSize="16sp"
+            android:hint="Enter new Password"
+            android:textColorHint="@color/white_greyish"
+
+
+            />
+        <!--        <TextureView-->
+        <!--            android:id="@+id/textEmail"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="20dp"-->
+        <!--            android:layout_marginTop="30dp"-->
+        <!--            android:text="@string/Email"-->
+        <!--            android:textColor="@color/black"-->
+        <!--            android:textSize="16sp"-->
+        <!--            android:layout_below="@id/EditPassword"-->
+        <!--            tools:ignore="MissingPrefix" />-->
+
+        <!--        <EditText-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:id="@+id/EditEmail"-->
+        <!--            android:layout_below="@id/textEmail"-->
+        <!--            android:padding="6dp"-->
+        <!--            android:inputType="textEmailAddress"-->
+        <!--            android:textSize="16sp"-->
+        <!--            android:hint="Enter new Email"-->
+        <!--            android:textColorHint="@color/white_greyish"-->
+        <!--            />-->
+        <TextView
+            android:id="@+id/textDob"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@id/EditPassword"
+            android:layout_marginTop="30dp"
+            android:text="@string/date_of_birth_dd_mm_yy"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:ignore="MissingPrefix" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditDob"
+            android:layout_below="@id/textDob"
+            android:padding="6dp"
+            android:inputType="date"
+            android:focusable="false"
+            android:textSize="16sp"
+            android:hint="Enter Date of Birth "
+            android:textColorHint="@color/white_greyish"
+            />
+        <TextView
+            android:id="@+id/textGender"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@id/EditDob"
+            android:layout_marginTop="30dp"
+            android:text="@string/Gender"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:ignore="MissingPrefix" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radio_button"
+            android:layout_below="@id/textGender"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio_female"
+                android:text="Female"
+                android:textSize="16sp"
+                android:textColor="@color/white_greyish"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio_male"
+                android:text="Male"
+                android:textSize="16sp"
+                android:textColor="@color/white_greyish"/>
+        </RadioGroup>
+        <TextView
+            android:id="@+id/textMobile"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="30dp"
+            android:text="Name "
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_below="@id/radio_button"
+            tools:ignore="MissingPrefix" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/EditMobile"
+            android:layout_below="@id/textMobile"
+            android:padding="6dp"
+            android:inputType="phone"
+            android:textSize="16sp"
+            android:hint="Enter new Phone"
+            android:textColorHint="@color/white_greyish"
+            />
+        <Button
+            android:id="@+id/Save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/loginbutton_selector"
+            android:layout_below="@id/EditMobile"
+            android:layout_marginTop="30dp"
+            android:text="Save"
+            android:textSize="16sp"/>
+        <Button
+            android:id="@+id/EditEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/loginbutton_selector"
+            android:layout_below="@id/Save"
+            android:layout_marginTop="30dp"
+            android:text="Update Email"
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+</ScrollView>
+    <!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    tools:context=".Update">-->
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:background="@drawable/top_background"-->
+    <!--        android:orientation="vertical">-->
+
+    <!--        &lt;!&ndash;        <ImageView&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:id="@+id/imageView"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_marginTop="30dp"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            tools:ignore="ContentDescription,HardcodedText,MissingConstraints"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            tools:srcCompat="@tools:sample/avatars"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:contentDescription="TODO" />&ndash;&gt;-->
+    <!--        <ImageView-->
+    <!--            android:id="@+id/imageView"-->
+    <!--            android:layout_width="100dp"-->
+    <!--            android:layout_height="100dp"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:background="@drawable/person"-->
+    <!--            android:layout_marginTop="30dp"/>-->
+    <!--        <TextView-->
+    <!--            android:id="@+id/textView"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            android:text="Asma "-->
+    <!--            android:textColor="@color/white_greyish"-->
+    <!--            android:textSize="20sp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            tools:ignore="HardcodedText,MissingConstraints" />-->
+
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:orientation="horizontal"-->
+    <!--            android:layout_marginTop="50dp">-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/textName"-->
+    <!--                android:layout_width="216dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_margin="20dp"-->
+    <!--                android:text="Name"-->
+    <!--                android:textSize="17sp"-->
+    <!--                android:textColor="@color/white"-->
+    <!--                tools:ignore="ExtraText"-->
+    <!--                />-->
+
+
+    <!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:id="@+id/imageView2"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_margin="20dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_weight="1"&ndash;&gt;-->
+    <!--&lt;!&ndash;                app:srcCompat="@drawable/person" />&ndash;&gt;-->
+
+    <!--        </LinearLayout>-->
+    <!--        <View-->
+    <!--            android:layout_width="fill_parent"-->
+    <!--            android:layout_height="2dp"-->
+    <!--            android:background="@color/white_greyish" />-->
+
+    <!--        &lt;!&ndash;pass&ndash;&gt;-->
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:orientation="horizontal">-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/textPassword"-->
+    <!--                android:layout_width="165dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_margin="20dp"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:text="Password"-->
+    <!--                android:textSize="17sp"-->
+    <!--                android:textColor="@color/white"-->
+    <!--                />-->
+
+    <!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:id="@+id/imageView3"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_weight="1"&ndash;&gt;-->
+    <!--&lt;!&ndash;                app:srcCompat="@drawable/edit"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_margin="20dp"/>&ndash;&gt;-->
+    <!--        </LinearLayout>-->
+    <!--        <View-->
+    <!--            android:layout_width="fill_parent"-->
+    <!--            android:layout_height="2dp"-->
+    <!--            android:background="@color/white_greyish" />-->
+    <!--        &lt;!&ndash; Email&ndash;&gt;-->
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:orientation="horizontal">-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/textEmail"-->
+    <!--                android:layout_width="168dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_margin="20dp"-->
+    <!--                android:layout_weight="1"-->
+    <!--                android:text="Email"-->
+    <!--                android:textSize="17sp"-->
+    <!--                android:textColor="@color/white"/>-->
+
+    <!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:id="@+id/imageView4"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_margin="20dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_weight="1"&ndash;&gt;-->
+    <!--&lt;!&ndash;                app:srcCompat="@drawable/edit" />&ndash;&gt;-->
+    <!--        </LinearLayout>-->
+    <!--        <View-->
+    <!--            android:layout_width="fill_parent"-->
+    <!--            android:layout_height="2dp"-->
+    <!--            android:background="@color/white_greyish" />-->
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:orientation="horizontal">-->
+
+    <!--            <TextView-->
+    <!--                android:id="@+id/textDob"-->
+    <!--                android:layout_width="216dp"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:layout_margin="20dp"-->
+    <!--                android:text="Date of Birth"-->
+    <!--                android:textSize="17sp"-->
+    <!--                android:textColor="@color/white"-->
+    <!--                tools:ignore="ExtraText"-->
+    <!--                />-->
+
+
+    <!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:id="@+id/imageView5"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_margin="20dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_weight="1"&ndash;&gt;-->
+    <!--&lt;!&ndash;                app:srcCompat="@drawable/edit" />&ndash;&gt;-->
+
+    <!--        </LinearLayout>-->
+    <!--&lt;!&ndash;        <View&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_width="fill_parent"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_height="2dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:background="@color/white_greyish" />&ndash;&gt;-->
+    <!--        &lt;!&ndash;  Locatin&ndash;&gt;-->
+
+    <!--&lt;!&ndash;        <LinearLayout&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;            android:orientation="horizontal">&ndash;&gt;-->
+
+    <!--&lt;!&ndash;            <TextView&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:id="@+id/textLocation"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_width="173dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_margin="20dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_weight="1"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:text="Location"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:textSize="17sp"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:textColor="@color/white" />&ndash;&gt;-->
+
+    <!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:id="@+id/imageView6"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_margin="20dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;                android:layout_weight="1"&ndash;&gt;-->
+    <!--&lt;!&ndash;                app:srcCompat="@drawable/location" />&ndash;&gt;-->
+
+    <!--&lt;!&ndash;        &ndash;&gt;-->
+
+
+    <!--        <Button-->
+    <!--            android:id="@+id/button"-->
+    <!--            android:layout_width="303dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginTop="70dp"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:background="@drawable/loginbutton_selector"-->
+    <!--            android:shadowRadius="@android:integer/config_longAnimTime"-->
+    <!--            android:text="save chang" />-->
+
+
+    <!--    </LinearLayout>-->
+    <!--    &lt;!&ndash;    <ProgressBar&ndash;&gt;-->
+    <!--    &lt;!&ndash;        android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--    &lt;!&ndash;        android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--    &lt;!&ndash;        tools:ignore="MissingConstraints"&ndash;&gt;-->
+    <!--    &lt;!&ndash;        android:layout_margin="100dp"/>&ndash;&gt;-->
+
+
+
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
