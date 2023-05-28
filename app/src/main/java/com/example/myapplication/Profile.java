@@ -95,6 +95,35 @@ public class Profile extends AppCompatActivity {
         });
     }
 
+    public TextView getTextName() {
+        return textName;
+    }
 
+    public void setTextName(TextView textName) {
+        this.textName = textName;
+    }
 
+    public TextView getTextPassword() {
+        return textPassword;
+    }
+
+    public void setTextPassword(TextView textPassword) {
+        this.textPassword = textPassword;
+    }
+
+    public TextView getTextEmail() {
+        return textEmail;
+    }
+
+    public void setTextEmail(TextView textEmail) {
+        this.textEmail = textEmail;
+    }
+
+    public TextView getTextDob() {
+        return textDob;
+    }
+
+    public void setTextDob(TextView textDob) {
+        this.textDob = textDob;
+    }
 }

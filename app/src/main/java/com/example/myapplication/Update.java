@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +23,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import kotlin.UByte;
 
 public class Update extends AppCompatActivity {
     private EditText textName;
@@ -36,7 +40,7 @@ public class Update extends AppCompatActivity {
     private String Name;
     private String Password;
     private String gender;
-    //  private String Dob;
+    private String Dob;
     private String mobile;
     private ImageView imageView;
     private FirebaseAuth authFirebase;
@@ -66,6 +70,43 @@ public class Update extends AppCompatActivity {
                 finish();
             }
         });
+        Button Save=findViewById(R.id.Save);
+        Save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                Name = intent.getStringExtra("Name");
+              Password = intent.getStringExtra("Pass");
+               gender = intent.getStringExtra("Gender");
+               Dob = intent.getStringExtra("desc");
+               mobile=intent.getStringExtra("mobile");
+
+
+                textName.setText(Name);
+                textPassword.setText(Password);
+                textDob.setText(Dob);
+                textMobile.setText(mobile);
+                intent = new Intent(Update.this, Profile.class);
+              startActivity(intent);
+              finish();
+            }
+        });
+
+        textDob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String[] AsDob= Dob.split("/");
+
+                int day = Integer.parseInt(AsDob[0]);
+                int month = Integer.parseInt(AsDob[1])-1;
+                int year = Integer.parseInt(AsDob[2]);
+//                DatePickerDialog pickerDialog;
+//                pickerDialog= new DatePickerDialog(Update.this,{
+//
+//                });
+            }
+        });
+
     }
 
     private void showProfile(FirebaseUser firebaseUser) {
@@ -89,6 +130,10 @@ public class Update extends AppCompatActivity {
                     //    textDob.setText(Dob);
                     textMobile.setText(mobile);
                     // the gender
+//                    if (RadioGendrr.get) {
+//                        return;
+//                    }
+
 
                 }
                 else {
