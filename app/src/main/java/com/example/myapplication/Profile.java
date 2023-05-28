@@ -50,8 +50,11 @@ public class Profile extends AppCompatActivity {
                 Intent in1;
                 in1 = new Intent (Profile.this,Update.class);
                 startActivity(in1);
+                finish();
             }
         });
+
+
 //        progressBar =findViewById(R.id.progressBarr);
         authFirebase =FirebaseAuth.getInstance();
 
@@ -126,4 +129,6 @@ public class Profile extends AppCompatActivity {
     public void setTextDob(TextView textDob) {
         this.textDob = textDob;
     }
+
+
 }

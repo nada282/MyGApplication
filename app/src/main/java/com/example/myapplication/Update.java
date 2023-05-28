@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -73,24 +74,27 @@ public class Update extends AppCompatActivity {
         Button Save=findViewById(R.id.Save);
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View v) {
-                Intent intent = getIntent();
-                Name = intent.getStringExtra("Name");
-              Password = intent.getStringExtra("Pass");
-               gender = intent.getStringExtra("Gender");
-               Dob = intent.getStringExtra("desc");
-               mobile=intent.getStringExtra("mobile");
-
-
-                textName.setText(Name);
-                textPassword.setText(Password);
-                textDob.setText(Dob);
-                textMobile.setText(mobile);
-                intent = new Intent(Update.this, Profile.class);
-              startActivity(intent);
-              finish();
+                SaveProfile(firebaseUser);
+//                Intent intent = getIntent();
+//                Name = intent.getStringExtra("Name");
+//              Password = intent.getStringExtra("Pass");
+//               gender = intent.getStringExtra("Gender");
+//               Dob = intent.getStringExtra("desc");
+//               mobile=intent.getStringExtra("mobile");
+//
+//
+//                textName.setText(Name);
+//                textPassword.setText(Password);
+//                textDob.setText(Dob);
+//                textMobile.setText(mobile);
+//                intent = new Intent(Update.this, Profile.class);
+//              startActivity(intent);
+//              finish();
             }
         });
+
 
         textDob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,13 +104,23 @@ public class Update extends AppCompatActivity {
                 int day = Integer.parseInt(AsDob[0]);
                 int month = Integer.parseInt(AsDob[1])-1;
                 int year = Integer.parseInt(AsDob[2]);
-//                DatePickerDialog pickerDialog;
-//                pickerDialog= new DatePickerDialog(Update.this,{
-//
-//                });
+                DatePickerDialog pickerDialog;
+                pickerDialog= new DatePickerDialog(Update.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        textDob.setText(dayOfMonth+"/"+(month+1)+"/"+year);
+
+                    }
+                },year,month,day);
+                pickerDialog.show();
             }
         });
 
+
+    }
+    private void SaveProfile(FirebaseUser firebaseUser) {
+        int selectGender=RadioGendrr.getCheckedRadioButtonId();
+        Selector=findViewById(selectGender);
     }
 
     private void showProfile(FirebaseUser firebaseUser) {

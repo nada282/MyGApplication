@@ -51,7 +51,7 @@
                 android:layout_width="216dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="Name"
+
                 android:textSize="17sp"
                 android:textColor="@color/white"
                 tools:ignore="ExtraText"
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_weight="1"
-                android:text="Password"
+
                 android:textSize="17sp"
                 android:textColor="@color/white"
                 />
@@ -206,7 +206,6 @@
             android:background="@drawable/loginbutton_selector"
             android:shadowRadius="@android:integer/config_longAnimTime"
             android:text="Logout"
-            android:onClick="btnlogout"
             tools:ignore="DuplicateIds" />
     </LinearLayout>
 

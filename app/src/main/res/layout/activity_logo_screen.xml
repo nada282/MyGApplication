@@ -5,27 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/activity_logo_screen_scene"
-    android:background="#83c8eb"
+    android:background="@drawable/top_background"
     tools:context=".LogoScreen">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/logo"
-        tools:layout_editor_absoluteX="139dp"
-        tools:layout_editor_absoluteY="256dp" />
+    <RelativeLayout
+        android:id="@+id/line1"
+        android:layout_width="411dp"
+        android:layout_height="734dp"
+        android:alpha="1"
+        android:rotation="1"
+        android:rotationX="1">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:layout_margin="150dp"
-        android:background="@drawable/serch_logo"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="143dp"
-        tools:layout_editor_absoluteY="268dp" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_margin="150dp"
+            android:background="@drawable/location"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_below="@id/imageView2"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="حولينا"
+            android:textColor="@color/white_greyish"
+            android:textSize="40sp" />
+
+    </RelativeLayout>
+
 
 
 
