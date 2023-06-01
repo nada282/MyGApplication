@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,12 +23,16 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
     private RecyclerView recyclerView;
     private ItemListAdapter adapter;
     private DatabaseReference servicesRef;
+    private SearchView searchView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dry_clean_list);
         recyclerView = findViewById(R.id.DrycleanList_recycler);
+
+        searchView = findViewById(R.id.search);
 
         // Get the details of the selected dryclean from the intent
         Intent intent = getIntent();
@@ -58,10 +63,36 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
 
 
         bottom.setOnNavigationItemSelectedListener(this);
-        // Create a new instance of ItemListAdapter and set it as the adapter for the RecyclerView
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Do nothing when the search query is submitted
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Call searchFirebase method to filter the data based on the entered query
+                searchFirebase(newText);
+                return true;
+            }
+        });
     }
 
+    private void searchFirebase(String query) {
+        Query searchQuery = servicesRef.orderByChild("name")
+                .startAt(query)
+                .endAt(query + "\uf8ff");
+
+        FirebaseRecyclerOptions<ServicesClass> options =
+                new FirebaseRecyclerOptions.Builder<ServicesClass>()
+                        .setQuery(searchQuery, ServicesClass.class)
+                        .build();
+
+        adapter.updateOptions(options);
+
+    }
 
 
     @Override

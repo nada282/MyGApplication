@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +11,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,22 +22,30 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener , RecycleViewOnItemClick{
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, RecycleViewOnItemClick, SearchView.OnQueryTextListener {
 
     private BottomNavigationView bottom;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private List<PlacesClass> novelsModels = new ArrayList<>();
     private List<PlacesClass> placesList = new ArrayList<>();
-
-
+    private SearchView searchView;
+    private PlacesAdapter adapter;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -52,24 +60,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         u.start();
 
 
-        //  RecyclerView recyclerView = findViewById(R.id.place_recycler);
         final DrawerLayout drawerLayout = findViewById(R.id.DrawerLayout);
-        //  final BottomNavigationView bottom=findViewById(R.id.bottom_nav);
-        //  navigationView=findViewById(R.id.navigation);
         bottom = findViewById(R.id.bottom);
-
 
         bottom.setOnNavigationItemSelectedListener(this);
 
-      /*  toggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.start,R.string.close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();*/
-
-
-
-
         findViewById(R.id.menu).setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(GravityCompat.START);
@@ -81,108 +77,65 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         BottomNavigationView nav1 = findViewById(R.id.bottom);
         nav1.setItemIconTintList(null);
 
+        searchView = findViewById(R.id.search);
+        searchView.setOnQueryTextListener(this);
 
-
-  /*   novelsModels.add(new PlacesClass("DryClean", R.drawable.dry));
-        novelsModels.add(new PlacesClass("SuperMarket", R.drawable.market));
-        novelsModels.add(new PlacesClass("Dorms", R.drawable.dorms));
-        novelsModels.add(new PlacesClass("Resturant", R.drawable.resturant));
-        novelsModels.add(new PlacesClass("Salon", R.drawable.salon));*/
-
-
-
-     //   recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-    //    Adapter1 adapter = new Adapter1(novelsModels, this);
-    //    recyclerView.setAdapter(adapter);
-
-
-
-
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted, request it
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
-            // Permission is already granted, get the location
             getLocation();
         }
-
-
     }
 
-
-    // Handle the result of the permission request
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission was granted, get the location
                 getLocation();
             } else {
-                // Permission was denied, show a message or take other action
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    // Get the device's location
     private void getLocation() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
-                // Do something with the location
-                Toast.makeText(this, "Latitude: " + latitude + ", Longitude: " + longitude,
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Latitude: " + latitude + ", Longitude: " + longitude, Toast.LENGTH_LONG).show();
             }
         }
-
     }
-
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch(id){
+        switch (id) {
             case R.id.home:
-                Intent in = new Intent (this,MainActivity.class);
+                Intent in = new Intent(this, MainActivity.class);
                 startActivity(in);
                 return true;
             case R.id.map:
-                Intent in1 = new Intent (this,Map.class);
+                Intent in1 = new Intent(this, Map.class);
                 startActivity(in1);
                 return true;
             case R.id.profile:
-                Intent in2 = new Intent (this,Profile.class);
+                Intent in2 = new Intent(this, Profile.class);
                 startActivity(in2);
                 return true;
         }
         return false;
-
     }
 
     @Override
     public void onItemClick(int position) {
-
 
     }
 
@@ -192,17 +145,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     public void salonclick(View view) {
-        Intent in = new Intent(this,Salon.class);
+        Intent in = new Intent(this, Salon.class);
         startActivity(in);
     }
 
     public void superMarketclick(View view) {
-        Intent in = new Intent(this,SuperMarket.class);
+        Intent in = new Intent(this, SuperMarket.class);
         startActivity(in);
     }
 
     public void DryCleanClick(View view) {
-        Intent in = new Intent(this,DryClean.class);
+        Intent in = new Intent(this, DryClean.class);
         startActivity(in);
     }
 
@@ -211,9 +164,197 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         startActivity(in);
     }
 
-
     public void DormsClick(View view) {
-        Intent in = new Intent(this,Dorms.class);
+        Intent in = new Intent(this, Dorms.class);
         startActivity(in);
     }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+
+        search(s);
+        searchView.clearFocus();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
+    }
+
+    private void search(String query) {
+        DatabaseReference supermarketRef = FirebaseDatabase.getInstance().getReference().child("Supermarket");
+        Query queryRef = supermarketRef.orderByChild("name").equalTo(query);
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+                    // Perform any action with the searched supermarket
+                    // For example, start the SupermarketItem activity and pass the supermarket ID
+                    Intent intent = new Intent(MainActivity.this, SupermarketItemList.class);
+                    intent.putExtra("supermarket_name", supermarket.getName());
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+            }
+        });
+
+        DatabaseReference salonRef = FirebaseDatabase.getInstance().getReference().child("salon");
+        Query querysalon = salonRef.orderByChild("name").equalTo(query);
+        querysalon.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+                    // Perform any action with the searched supermarket
+                    // For example, start the SupermarketItem activity and pass the supermarket ID
+                    Intent intent = new Intent(MainActivity.this, SalonList.class);
+                    intent.putExtra("salon_name", supermarket.getName());
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+            }
+        });
+
+        //    ---------------------------------------
+        DatabaseReference RestRef = FirebaseDatabase.getInstance().getReference().child("Resturant");
+        Query queryRest = RestRef.orderByChild("name").equalTo(query);
+        queryRest.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+                    // Perform any action with the searched supermarket
+                    // For example, start the SupermarketItem activity and pass the supermarket ID
+                    Intent intent = new Intent(MainActivity.this,RestaurantList.class);
+                    intent.putExtra("restaurant_name", supermarket.getName());
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+            }
+        });
+
+        //-----------------------
+        DatabaseReference dryRef = FirebaseDatabase.getInstance().getReference().child("DryClean");
+        Query querydry = dryRef.orderByChild("name").equalTo(query);
+        querydry.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+                    // Perform any action with the searched supermarket
+                    // For example, start the SupermarketItem activity and pass the supermarket ID
+                    Intent intent = new Intent(MainActivity.this, DryCleanList.class);
+                    intent.putExtra("dryclean_name", supermarket.getName());
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+            }
+        });
+
+
+        //-----------------------------------------
+
+        DatabaseReference itemRef = FirebaseDatabase.getInstance().getReference().child("Items");
+        Query queryitem = itemRef.orderByChild("name").equalTo(query);
+        queryitem.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ServicesClass supermarket = snapshot.getValue(ServicesClass.class);
+                    Intent intent = new Intent(MainActivity.this, ServiceDetails.class);
+
+                    intent.putExtra("id", snapshot.getKey());
+                    intent.putExtra("name", supermarket.getName());
+                    intent.putExtra("price", supermarket.getPrice());
+                    intent.putExtra("desc", supermarket.getDescription());
+                    intent.putExtra("image", supermarket.getImage());
+
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+            }
+        });
+
+
+        //------------------------------------------------
+
+        DatabaseReference ItemRef = FirebaseDatabase.getInstance().getReference().child("\n" +
+                "SuperMarketItems");
+        Query queryItem = ItemRef.orderByChild("name").equalTo(query);
+        queryItem.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ServicesClass supermarket = snapshot.getValue(ServicesClass.class);
+                    Intent intent = new Intent(MainActivity.this, ServiceDetails.class);
+
+                    intent.putExtra("id", snapshot.getKey());
+                    intent.putExtra("name", supermarket.getName());
+                    intent.putExtra("price", supermarket.getPrice());
+                    intent.putExtra("desc", supermarket.getDescription());
+                    intent.putExtra("image", supermarket.getImage());
+
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+            }
+        });
+
+
+        //-------------------------------------------------
+        DatabaseReference serviceRef = FirebaseDatabase.getInstance().getReference().child("\n" +
+                "Services");
+        Query queryservice = serviceRef.orderByChild("name").equalTo(query);
+        queryservice.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ServicesClass supermarket = snapshot.getValue(ServicesClass.class);
+                    Intent intent = new Intent(MainActivity.this, ServiceDetails.class);
+
+                    intent.putExtra("id", snapshot.getKey());
+                    intent.putExtra("name", supermarket.getName());
+                    intent.putExtra("price", supermarket.getPrice());
+                    intent.putExtra("desc", supermarket.getDescription());
+                    intent.putExtra("image", supermarket.getImage());
+
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle any errors
+            }
+        });
+    }
+
+
+
 }
