@@ -300,8 +300,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         //------------------------------------------------
 
-        DatabaseReference ItemRef = FirebaseDatabase.getInstance().getReference().child("\n" +
-                "SuperMarketItems");
+        DatabaseReference ItemRef = FirebaseDatabase.getInstance().getReference().child("SuperMarketItems");
         Query queryItem = ItemRef.orderByChild("name").equalTo(query);
         queryItem.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -328,8 +327,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
         //-------------------------------------------------
-        DatabaseReference serviceRef = FirebaseDatabase.getInstance().getReference().child("\n" +
-                "Services");
+        DatabaseReference serviceRef = FirebaseDatabase.getInstance().getReference().child("Services");
         Query queryservice = serviceRef.orderByChild("name").equalTo(query);
         queryservice.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
