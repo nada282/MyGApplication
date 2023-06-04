@@ -8,10 +8,8 @@ import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -23,7 +21,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -47,9 +44,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private NavigationView navigationView;
     private List<PlacesClass> novelsModels = new ArrayList<>();
     private List<PlacesClass> placesList = new ArrayList<>();
-    private RecyclerView recyclerView;
-    private FavAdapter favouriteAdapter;
-    private List<Restaurant_Fav> favoritesList;
     private SearchView searchView;
     private PlacesAdapter adapter;
 
@@ -65,18 +59,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         AnimationDrawable u = (AnimationDrawable) v.getDrawable();
         u.start();
 
-        Button getdata = findViewById(R.id.btn_getData);
 
-
-            getdata.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, FavouriteList.class);
-                    startActivity(intent);
-                }
-            });
-
-        favoritesList = new ArrayList<>(); // Initialize favoritesList
         final DrawerLayout drawerLayout = findViewById(R.id.DrawerLayout);
         bottom = findViewById(R.id.bottom);
 
@@ -85,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         findViewById(R.id.menu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
@@ -103,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } else {
             getLocation();
         }
-
     }
 
     @Override

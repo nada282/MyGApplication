@@ -14,6 +14,8 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 
+import java.util.List;
+
 public class PlacesAdapter extends FirebaseRecyclerAdapter<PlacesClass, PlacesAdapter.SalonViewHolder> {
 
     private OnItemClickListener listener;
@@ -21,6 +23,8 @@ public class PlacesAdapter extends FirebaseRecyclerAdapter<PlacesClass, PlacesAd
     public PlacesAdapter(@NonNull FirebaseRecyclerOptions<PlacesClass> options) {
         super(options);
     }
+
+
 
     @Override
     protected void onBindViewHolder(@NonNull SalonViewHolder holder, int position, @NonNull PlacesClass model) {
