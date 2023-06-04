@@ -33,6 +33,8 @@ public class ItemListAdapter extends FirebaseRecyclerAdapter<ServicesClass, Item
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_list, parent, false);
         return new SalonViewHolder(view);
+
+
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -45,6 +47,7 @@ public class ItemListAdapter extends FirebaseRecyclerAdapter<ServicesClass, Item
         private TextView name;
         private TextView price;
         // Add more TextViews or views as needed
+
 
         public SalonViewHolder(View itemView) {
             super(itemView);

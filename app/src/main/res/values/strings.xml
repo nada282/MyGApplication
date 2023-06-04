@@ -23,4 +23,8 @@
     <string name="title_activity_map">title_activity_map</string>
     <string name="Gender">"\n "</string>
     <string name="date_of_birth_dd_mm_yy" />
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
 </resources>

@@ -43,7 +43,7 @@ public class SupermarketItemList extends AppCompatActivity implements BottomNavi
         // Set the title of the action bar to the name of the selected salon
 
         // Construct the database reference for the services of the selected salon
-        servicesRef = FirebaseDatabase.getInstance().getReference().child("Items");
+        servicesRef = FirebaseDatabase.getInstance().getReference().child("SuperMarketItems");
         Query query = servicesRef.orderByChild("Supermarket").equalTo(supermarketName);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         FirebaseRecyclerOptions<ServicesClass> options =

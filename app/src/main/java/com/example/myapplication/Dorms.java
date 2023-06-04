@@ -47,7 +47,7 @@ public class Dorms extends AppCompatActivity implements BottomNavigationView.OnN
 
         bottom.setOnNavigationItemSelectedListener(this);
 
-     //  setupAdapterClickListener();
+        //  setupAdapterClickListener();
     }
 
 //    private void setupAdapterClickListener() {
