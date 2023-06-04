@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private List<PlacesClass> placesList = new ArrayList<>();
     private SearchView searchView;
     private PlacesAdapter adapter;
+    ImageView love;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -59,13 +60,24 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         AnimationDrawable u = (AnimationDrawable) v.getDrawable();
         u.start();
 
+        love = findViewById(R.id.love);
 
         final DrawerLayout drawerLayout = findViewById(R.id.DrawerLayout);
         bottom = findViewById(R.id.bottom);
 
         bottom.setOnNavigationItemSelectedListener(this);
 
-        findViewById(R.id.menu).setOnClickListener(new View.OnClickListener() {
+       love.setOnClickListener(new View.OnClickListener() {
+
+
+                                                       @Override
+                                                       public void onClick(View view) {
+                                                           Intent in = new Intent(MainActivity.this,FavouriteList.class);
+                                                           startActivity(in);
+                                                       }
+                                                   });
+
+            findViewById(R.id.menu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(GravityCompat.START);
