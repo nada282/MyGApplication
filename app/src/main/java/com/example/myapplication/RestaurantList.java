@@ -75,7 +75,7 @@ public class RestaurantList extends AppCompatActivity implements BottomNavigatio
             @Override
             public boolean onQueryTextChange(String newText) {
                 // Call searchFirebase method to filter the data based on the entered query
-                    searchFirebase(newText);
+                searchFirebase(newText);
                 return true;
             }
         });

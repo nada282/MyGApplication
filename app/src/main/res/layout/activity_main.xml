@@ -53,7 +53,7 @@
                 android:layout_marginLeft="40dp"
                 android:contentDescription="app-name"
                 android:src="@drawable/baseline_favorite_24"
-                android:tint="@color/RED" />
+                android:tint="@color/white" />
 
 
             <TextView

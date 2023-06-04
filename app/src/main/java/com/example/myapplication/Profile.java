@@ -28,6 +28,7 @@ public class Profile extends AppCompatActivity {
     private TextView textEmail;
     private TextView textDob;
     private TextView textLocation;
+    private Button button,button2;
 
     //   private ProgressBar progressBar;
     private String Name,Password,Email,Dob;
@@ -43,24 +44,32 @@ public class Profile extends AppCompatActivity {
         textEmail = findViewById(R.id.textEmail);
         textDob = findViewById(R.id.textDob);
         textLocation= findViewById(R.id.textLocation);
-        Button button= findViewById(R.id.button);
+         button= findViewById(R.id.button);
+         button2= findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent in1;
                 in1 = new Intent (Profile.this,Update.class);
                 startActivity(in1);
-                finish();
             }
         });
 
-
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in2;
+                in2 = new Intent (Profile.this,Registration.class);
+                startActivity(in2);
+//                finish();
+            }
+        });
 //        progressBar =findViewById(R.id.progressBarr);
         authFirebase =FirebaseAuth.getInstance();
 
         FirebaseUser firebaseUser= authFirebase.getCurrentUser();
         if (firebaseUser==null){
-            Toast.makeText(this, "Somthing Wrong With DataBase", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Something Wrong With DataBase", Toast.LENGTH_SHORT).show();
         }
         else {
             //  progressBar.setVisibility(View.VISIBLE);
@@ -129,6 +138,7 @@ public class Profile extends AppCompatActivity {
     public void setTextDob(TextView textDob) {
         this.textDob = textDob;
     }
+
 
 
 }

@@ -67,17 +67,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         bottom.setOnNavigationItemSelectedListener(this);
 
-       love.setOnClickListener(new View.OnClickListener() {
+        love.setOnClickListener(new View.OnClickListener() {
 
 
-                                                       @Override
-                                                       public void onClick(View view) {
-                                                           Intent in = new Intent(MainActivity.this,FavouriteList.class);
-                                                           startActivity(in);
-                                                       }
-                                                   });
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(MainActivity.this,FavouriteList.class);
+                startActivity(in);
+            }
+        });
 
-            findViewById(R.id.menu).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.menu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(GravityCompat.START);

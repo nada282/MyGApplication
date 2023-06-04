@@ -112,4 +112,4 @@ public class FavouriteList extends AppCompatActivity implements BottomNavigation
         // Add any other necessary data as extras
         startActivity(intent);
     }
-    }
+}
