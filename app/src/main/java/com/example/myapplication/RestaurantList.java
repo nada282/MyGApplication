@@ -17,9 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RestaurantList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener ,ItemListAdapter.OnItemClickListener{
 
     private BottomNavigationView bottom;
@@ -28,23 +25,13 @@ public class RestaurantList extends AppCompatActivity implements BottomNavigatio
     private DatabaseReference servicesRef;
 
     private SearchView searchView;
-    private List<Restaurant_Fav> restaurantList;
-    private List<Restaurant_Fav> favoritesList;
-    private RestaurantAdapter restaurantAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_list);
-
-
-        favoritesList = new ArrayList<>(); // Initialize favoritesList
-
         recyclerView = findViewById(R.id.RestaurantList_recycler);
-        restaurantAdapter = new RestaurantAdapter(restaurantList, favoritesList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(restaurantAdapter);
-
         searchView = findViewById(R.id.search);
 
 
@@ -88,18 +75,11 @@ public class RestaurantList extends AppCompatActivity implements BottomNavigatio
             @Override
             public boolean onQueryTextChange(String newText) {
                 // Call searchFirebase method to filter the data based on the entered query
-                    searchFirebase(newText);
+                searchFirebase(newText);
                 return true;
             }
         });
-
-
     }
-
-//    public void addToFavorites(Restaurant_Fav restaurant) {
-//        favoritesList.add(restaurant);
-//        restaurantAdapter.notifyDataSetChanged();
-//    }
 
     private void searchFirebase(String query) {
         Query searchQuery = servicesRef.orderByChild("name")

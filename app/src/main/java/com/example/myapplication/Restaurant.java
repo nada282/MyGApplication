@@ -31,20 +31,13 @@ public class Restaurant extends AppCompatActivity implements BottomNavigationVie
     private List<PlacesClass> allRestuarant;
     private SearchView searchView;
 
-    private List<Restaurant_Fav> restaurantList;
-    private List<Restaurant_Fav> favoritesList;
-    private RestaurantAdapter restaurantAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resturant);
-        favoritesList = new ArrayList<>();
 
         recyclerView = findViewById(R.id.rest_recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.setAdapter(restaurantAdapter);
-        setupAdapters();
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Resturant");
         allRestuarant = new ArrayList<>();
@@ -72,34 +65,6 @@ public class Restaurant extends AppCompatActivity implements BottomNavigationVie
                 return true;
             }
         });
-    }
-    private void setupAdapters() {
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                restaurantList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Restaurant_Fav restaurant = snapshot.getValue(Restaurant_Fav.class);
-                    restaurantList.add(restaurant);
-                }
-                restaurantAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle the error
-            }
-        };
-
-        databaseReference.addListenerForSingleValueEvent(valueEventListener);
-    }
-
-
-
-
-    public void addToFavorites(Restaurant_Fav restaurant) {
-        favoritesList.add(restaurant);
-        restaurantAdapter.notifyDataSetChanged();
     }
 
     private void setupAdapter() {
