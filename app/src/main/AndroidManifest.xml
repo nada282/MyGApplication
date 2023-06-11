@@ -80,13 +80,12 @@
         <activity
             android:name=".Map"
             android:exported="false"
-            android:label="@string/title_activity_map" />
-<!--        <activity-->
-<!--            android:name=".Signup_Fragment"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".Login_Fragment"-->
-<!--            android:exported="false" />-->
+            android:label="@string/title_activity_map" /> <!-- <activity -->
+        <!-- android:name=".Signup_Fragment" -->
+        <!-- android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".Login_Fragment" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".Registration"
             android:exported="false" />

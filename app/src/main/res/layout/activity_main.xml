@@ -205,6 +205,35 @@
             </LinearLayout>
         </HorizontalScrollView>
 
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recommended Restaurant"
+            android:textStyle="bold"
+            android:layout_marginTop="440dp"
+
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="433dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Recommended_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="460dp"
+            android:background="@drawable/top_background"
+            android:scrollbars="vertical"
+            android:padding="2dp"
+            />
+
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

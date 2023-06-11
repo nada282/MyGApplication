@@ -4,6 +4,16 @@ public class PlacesClass {
     private String name;
     private String image;
 
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    private float rating;
+
 
     public PlacesClass(){
 

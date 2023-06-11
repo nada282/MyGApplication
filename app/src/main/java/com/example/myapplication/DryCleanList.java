@@ -3,6 +3,8 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -10,12 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class DryCleanList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener ,ItemListAdapter.OnItemClickListener{
 
@@ -24,6 +29,12 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
     private ItemListAdapter adapter;
     private DatabaseReference servicesRef;
     private SearchView searchView;
+    private RatingBar rating;
+
+    private String drycleanId;
+    String drycleanName;
+    String drycleanImageUrl;
+
 
 
     @Override
@@ -32,13 +43,26 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_dry_clean_list);
         recyclerView = findViewById(R.id.DrycleanList_recycler);
 
-        searchView = findViewById(R.id.search);
+        searchView = findViewById(R.id.searchButton);
 
-        // Get the details of the selected dryclean from the intent
+        rating = findViewById(R.id.ratingBar);
+
+        ImageView restaurantImageView = findViewById(R.id.restaurantImageView);
+
+        // Get the details of the selected restaurant from the intent
         Intent intent = getIntent();
-        String drycleanId = intent.getStringExtra("dryclean_id");
-        String drycleanName = intent.getStringExtra("dryclean_name");
-        String drycleanImageUrl = intent.getStringExtra("dryclean_image");
+        String restaurantImage = intent.getStringExtra("restaurant_image");
+
+        // Load the restaurant image into the ImageView using Glide
+        Glide.with(this)
+                .load(restaurantImage)
+                .centerCrop()
+                .into(restaurantImageView);
+
+
+         drycleanId = intent.getStringExtra("dryclean_id");
+         drycleanName = intent.getStringExtra("dryclean_name");
+         drycleanImageUrl = intent.getStringExtra("dryclean_image");
 
         // Set the title of the action bar to the name of the selected salon
 
@@ -64,6 +88,14 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
 
         bottom.setOnNavigationItemSelectedListener(this);
 
+        rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+
+                updateRating(rating);
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -78,6 +110,36 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
                 return true;
             }
         });
+
+        DatabaseReference restaurantRef = FirebaseDatabase.getInstance().getReference().child("DryClean");
+        Query query1 = restaurantRef.orderByChild("name").equalTo(drycleanName);
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        Float ratingValue = childSnapshot.child("rating").getValue(Float.class);
+                        float ratingFloat = ratingValue != null ? ratingValue : 0.0f;
+                        rating.setRating(ratingFloat);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle the error if needed
+            }
+        });
+    }
+
+    private void updateRating(float rating) {
+        DatabaseReference restaurantRef = FirebaseDatabase.getInstance().getReference().child("DryClean");
+        restaurantRef.child(drycleanId).child("rating").setValue(rating);
+
+        DatabaseReference recommendedRef = FirebaseDatabase.getInstance().getReference().child("RecommendedClean");
+        recommendedRef.child(drycleanId).child("rating").setValue(rating);
+        recommendedRef.child(drycleanId).child("name").setValue(drycleanName);
+        recommendedRef.child(drycleanId).child("image").setValue(drycleanImageUrl);
     }
 
     private void searchFirebase(String query) {

@@ -3,6 +3,8 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -10,20 +12,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class SupermarketItemList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener ,ItemListAdapter.OnItemClickListener{
 
     private BottomNavigationView bottom;
     private RecyclerView recyclerView;
     private ItemListAdapter adapter;
+    private RatingBar rating;
+    private String supermarketId;
+    String supermarketName;
+
+
     private DatabaseReference servicesRef;
     private SearchView searchView;
+    String Image;
+
 
 
     @Override
@@ -32,35 +44,69 @@ public class SupermarketItemList extends AppCompatActivity implements BottomNavi
         setContentView(R.layout.activity_supermarket_item_list);
         recyclerView = findViewById(R.id.SupermarketItemList_recycler);
 
-        searchView = findViewById(R.id.search);
+        rating = findViewById(R.id.ratingBar);
 
-        // Get the details of the selected salon from the intent
+
+        ImageView imageView = findViewById(R.id.image);
+
         Intent intent = getIntent();
-        String supermarketId = intent.getStringExtra("supermarket_id");
-        String supermarketName = intent.getStringExtra("supermarket_name");
-        String supermarketImageUrl = intent.getStringExtra("supermarket_image");
+         Image = intent.getStringExtra("supermarket_image");
 
-        // Set the title of the action bar to the name of the selected salon
+        // Load the supermarket image into the ImageView using Glide
+        Glide.with(this)
+                .load(Image)
+                .centerCrop()
+                .into(imageView);
 
-        // Construct the database reference for the services of the selected salon
+        searchView = findViewById(R.id.searchButton);
+
+        // Get the details of the selected supermarket from the intent
+        supermarketId = intent.getStringExtra("supermarket_id");
+        supermarketName = intent.getStringExtra("supermarket_name");
+
+        DatabaseReference supermarketRef = FirebaseDatabase.getInstance().getReference().child("Supermarket");
+        Query query = supermarketRef.orderByChild("name").equalTo(supermarketName);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        Float ratingValue = childSnapshot.child("rating").getValue(Float.class);
+                        float ratingFloat = ratingValue != null ? ratingValue : 0.0f;
+                        rating.setRating(ratingFloat);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle the error if needed
+            }
+        });
+
+        rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                updateRating(rating);
+            }
+        });
+
+        // Construct the database reference for the services of the selected supermarket
         servicesRef = FirebaseDatabase.getInstance().getReference().child("SuperMarketItems");
-        Query query = servicesRef.orderByChild("Supermarket").equalTo(supermarketName);
+        Query servicesQuery = servicesRef.orderByChild("Supermarket").equalTo(supermarketName);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         FirebaseRecyclerOptions<ServicesClass> options =
                 new FirebaseRecyclerOptions.Builder<ServicesClass>()
-                        .setQuery(query, ServicesClass.class)
+                        .setQuery(servicesQuery, ServicesClass.class)
                         .build();
 
         adapter = new ItemListAdapter(options);
         adapter.setOnItemClickListener(this);
 
         recyclerView.setAdapter(adapter);
-        // Create a FirebaseRecyclerOptions object for the adapter
 
         bottom = findViewById(R.id.bottom);
-        BottomNavigationView nav1 = findViewById(R.id.bottom);
-        nav1.setItemIconTintList(null);
-
+        bottom.setItemIconTintList(null);
 
         bottom.setOnNavigationItemSelectedListener(this);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -79,6 +125,8 @@ public class SupermarketItemList extends AppCompatActivity implements BottomNavi
         });
     }
 
+
+
     private void searchFirebase(String query) {
         Query searchQuery = servicesRef.orderByChild("name")
                 .startAt(query)
@@ -92,6 +140,15 @@ public class SupermarketItemList extends AppCompatActivity implements BottomNavi
         adapter.updateOptions(options);
     }
 
+    private void updateRating(float rating) {
+        DatabaseReference restaurantRef = FirebaseDatabase.getInstance().getReference().child("Supermarket");
+        restaurantRef.child(supermarketId).child("rating").setValue(rating);
+
+        DatabaseReference recommendedRef = FirebaseDatabase.getInstance().getReference().child("RecommendedMarket");
+        recommendedRef.child(supermarketId).child("rating").setValue(rating);
+        recommendedRef.child(supermarketId).child("name").setValue(supermarketName);
+        recommendedRef.child(supermarketId).child("image").setValue(Image);
+    }
 
     @Override
     protected void onStart() {

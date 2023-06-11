@@ -13,6 +13,10 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.Query;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemListAdapter extends FirebaseRecyclerAdapter<ServicesClass, ItemListAdapter.SalonViewHolder> {
 
@@ -21,6 +25,16 @@ public class ItemListAdapter extends FirebaseRecyclerAdapter<ServicesClass, Item
     public ItemListAdapter(@NonNull FirebaseRecyclerOptions<ServicesClass> options) {
         super(options);
     }
+
+    public void updateData(Query query) {
+        FirebaseRecyclerOptions<ServicesClass> options =
+                new FirebaseRecyclerOptions.Builder<ServicesClass>()
+                        .setQuery(query, ServicesClass.class)
+                        .build();
+
+        updateOptions(options);
+    }
+
 
     @Override
     protected void onBindViewHolder(@NonNull SalonViewHolder holder, int position, @NonNull ServicesClass model) {

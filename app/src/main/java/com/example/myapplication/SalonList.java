@@ -3,6 +3,8 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -10,12 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class SalonList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ItemListAdapter.OnItemClickListener {
 
@@ -25,24 +30,36 @@ public class SalonList extends AppCompatActivity implements BottomNavigationView
     private DatabaseReference servicesRef;
     private SearchView searchView;
 
+    private RatingBar rating;
+    private String salonId;
+    String salonName;
+    String salonImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_list);
-        searchView = findViewById(R.id.search);
+        searchView = findViewById(R.id.searchButton);
 
         recyclerView = findViewById(R.id.placeList_recycler);
 
-        // Get the details of the selected salon from the intent
+        rating = findViewById(R.id.ratingBar);
+
+        ImageView salonImageView = findViewById(R.id.restaurantImageView);
+
         Intent intent = getIntent();
-        String salonId = intent.getStringExtra("salon_id");
-        String salonName = intent.getStringExtra("salon_name");
-        String salonImageUrl = intent.getStringExtra("salon_image");
+         salonImage = intent.getStringExtra("salon_image");
 
-        // Set the title of the action bar to the name of the selected salon
+        Glide.with(this)
+                .load(salonImage)
+                .centerCrop()
+                .into(salonImageView);
 
-        // Construct the database reference for the services of the selected salon
+        salonId = intent.getStringExtra("salon_id");
+         salonName = intent.getStringExtra("salon_name");
+         salonImage = intent.getStringExtra("salon_image");
+
+
         servicesRef = FirebaseDatabase.getInstance().getReference().child("Services");
         Query query = servicesRef.orderByChild("salon").equalTo(salonName);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -75,6 +92,47 @@ public class SalonList extends AppCompatActivity implements BottomNavigationView
                 return true;
             }
         });
+
+
+        DatabaseReference salonRef = FirebaseDatabase.getInstance().getReference().child("salon");
+        Query query1 = salonRef.orderByChild("name").equalTo(salonName);
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        Float ratingValue = childSnapshot.child("rating").getValue(Float.class);
+                        float ratingFloat = ratingValue != null ? ratingValue : 0.0f;
+                        rating.setRating(ratingFloat);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle the error if needed
+            }
+        });
+
+
+        rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                updateRating(rating);
+            }
+        });
+
+    }
+
+    private void updateRating(float rating) {
+        DatabaseReference salonRef = FirebaseDatabase.getInstance().getReference().child("salon");
+        salonRef.child(salonId).child("rating").setValue(rating);
+
+
+        DatabaseReference recommendedRef = FirebaseDatabase.getInstance().getReference().child("RecommendedSalon");
+        recommendedRef.child(salonId).child("rating").setValue(rating);
+        recommendedRef.child(salonId).child("name").setValue(salonName);
+        recommendedRef.child(salonId).child("image").setValue(salonImage);
     }
 
     private void searchFirebase(String query) {
@@ -122,7 +180,6 @@ public class SalonList extends AppCompatActivity implements BottomNavigationView
         return false;
     }
 
-
     @Override
     public void onItemClick(DataSnapshot snapshot, int position) {
         ServicesClass salon = snapshot.getValue(ServicesClass.class);
@@ -137,9 +194,4 @@ public class SalonList extends AppCompatActivity implements BottomNavigationView
         // Add any other necessary data as extras
         startActivity(intent);
     }
-
-
-
-
-
 }

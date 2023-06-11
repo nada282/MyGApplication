@@ -3,6 +3,8 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -10,40 +12,56 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-public class RestaurantList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener ,ItemListAdapter.OnItemClickListener{
+public class RestaurantList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ItemListAdapter.OnItemClickListener {
 
     private BottomNavigationView bottom;
     private RecyclerView recyclerView;
     private ItemListAdapter adapter;
     private DatabaseReference servicesRef;
-
+    private RatingBar rating;
     private SearchView searchView;
 
+    private String restaurantId;
+    String restaurantName;
+    String restaurantImageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_list);
         recyclerView = findViewById(R.id.RestaurantList_recycler);
-        searchView = findViewById(R.id.search);
+        searchView = findViewById(R.id.searchButton);
+        rating = findViewById(R.id.ratingBar);
 
+        ImageView restaurantImageView = findViewById(R.id.restaurantImageView);
 
-        // Get the details of the selected salon from the intent
+        // Get the details of the selected restaurant from the intent
         Intent intent = getIntent();
-        String restaurantId = intent.getStringExtra("restaurant_id");
-        String restaurantName = intent.getStringExtra("restaurant_name");
-        String restaurantImageUrl = intent.getStringExtra("restaurant_image");
+        String restaurantImage = intent.getStringExtra("restaurant_image");
 
-        // Set the title of the action bar to the name of the selected salon
+        // Load the restaurant image into the ImageView using Glide
+        Glide.with(this)
+                .load(restaurantImage)
+                .centerCrop()
+                .into(restaurantImageView);
 
-        // Construct the database reference for the services of the selected Restaurant
+        // Get the details of the selected restaurant from the intent
+        restaurantId = intent.getStringExtra("restaurant_id");
+         restaurantName = intent.getStringExtra("restaurant_name");
+        restaurantImageUrl = intent.getStringExtra("restaurant_image");
+
+
+
         servicesRef = FirebaseDatabase.getInstance().getReference().child("Items");
         Query query = servicesRef.orderByChild("Resturant").equalTo(restaurantName);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -56,14 +74,33 @@ public class RestaurantList extends AppCompatActivity implements BottomNavigatio
         adapter.setOnItemClickListener(this);
 
         recyclerView.setAdapter(adapter);
-        // Create a FirebaseRecyclerOptions object for the adapter
 
         bottom = findViewById(R.id.bottom);
-        BottomNavigationView nav1 = findViewById(R.id.bottom);
-        nav1.setItemIconTintList(null);
-
-
+        bottom.setItemIconTintList(null);
         bottom.setOnNavigationItemSelectedListener(this);
+
+
+
+        // Retrieve the rating value from the Firebase database
+        DatabaseReference restaurantRef = FirebaseDatabase.getInstance().getReference().child("Resturant");
+        Query query1 = restaurantRef.orderByChild("name").equalTo(restaurantName);
+        query1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        Float ratingValue = childSnapshot.child("rating").getValue(Float.class);
+                        float ratingFloat = ratingValue != null ? ratingValue : 0.0f;
+                        rating.setRating(ratingFloat);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle the error if needed
+            }
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -74,9 +111,16 @@ public class RestaurantList extends AppCompatActivity implements BottomNavigatio
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Call searchFirebase method to filter the data based on the entered query
                 searchFirebase(newText);
                 return true;
+            }
+        });
+
+        rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+
+                updateRating(rating);
             }
         });
     }
@@ -92,6 +136,16 @@ public class RestaurantList extends AppCompatActivity implements BottomNavigatio
                         .build();
 
         adapter.updateOptions(options);
+    }
+
+    private void updateRating(float rating) {
+        DatabaseReference restaurantRef = FirebaseDatabase.getInstance().getReference().child("Resturant");
+        restaurantRef.child(restaurantId).child("rating").setValue(rating);
+
+        DatabaseReference recommendedRef = FirebaseDatabase.getInstance().getReference().child("Recommended");
+        recommendedRef.child(restaurantId).child("rating").setValue(rating);
+        recommendedRef.child(restaurantId).child("name").setValue(restaurantName);
+        recommendedRef.child(restaurantId).child("image").setValue(restaurantImageUrl);
     }
 
 
@@ -110,17 +164,17 @@ public class RestaurantList extends AppCompatActivity implements BottomNavigatio
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch(id){
+        switch (id) {
             case R.id.home:
-                Intent in = new Intent (this,MainActivity.class);
+                Intent in = new Intent(this, MainActivity.class);
                 startActivity(in);
                 return true;
             case R.id.map:
-                Intent in1 = new Intent (this,Map.class);
+                Intent in1 = new Intent(this, Map.class);
                 startActivity(in1);
                 return true;
             case R.id.profile:
-                Intent in2 = new Intent (this,Profile.class);
+                Intent in2 = new Intent(this, Profile.class);
                 startActivity(in2);
                 return true;
         }
@@ -129,14 +183,14 @@ public class RestaurantList extends AppCompatActivity implements BottomNavigatio
 
     @Override
     public void onItemClick(DataSnapshot snapshot, int position) {
-        ServicesClass salon = snapshot.getValue(ServicesClass.class);
+        ServicesClass service = snapshot.getValue(ServicesClass.class);
 
         Intent intent = new Intent(RestaurantList.this, ServiceDetails.class);
         intent.putExtra("id", snapshot.getKey());
-        intent.putExtra("name", salon.getName());
-        intent.putExtra("price", salon.getPrice());
-        intent.putExtra("desc", salon.getDescription());
-        intent.putExtra("image", salon.getImage());
+        intent.putExtra("name", service.getName());
+        intent.putExtra("price", service.getPrice());
+        intent.putExtra("desc", service.getDescription());
+        intent.putExtra("image", service.getImage());
 
         // Add any other necessary data as extras
         startActivity(intent);
