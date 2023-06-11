@@ -21,6 +21,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -45,8 +48,39 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private List<PlacesClass> novelsModels = new ArrayList<>();
     private List<PlacesClass> placesList = new ArrayList<>();
     private SearchView searchView;
-    private PlacesAdapter adapter;
+    private RecommendAdapter adapter;
+    private RecommendAdapter adapter1;
+    private RecommendAdapter adapter2;
+    private RecommendAdapter adapter3;
+    private RecommendAdapter adapter4;
+    private RecommendAdapter adapter5;
+
+    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference1;
+    private DatabaseReference databaseReference2;
+    private DatabaseReference databaseReference3;
+    private DatabaseReference databaseReference4;
+    private DatabaseReference databaseReference5;
+
+
+    private RecyclerView recyclerView;
+    private RecyclerView recyclerView1;
+    private RecyclerView recyclerView2;
+    private RecyclerView recyclerView3;
+    private RecyclerView recyclerView4;
+    private RecyclerView recyclerView5;
+
+
     ImageView love;
+    private List<PlacesClass> Recommend;
+    private List<PlacesClass> RecommendR;
+    private List<PlacesClass> RecommendD;
+    private List<PlacesClass> RecommendSt;
+    private List<PlacesClass> RecommendS;
+    private List<PlacesClass> RecommendDo;
+
+
+
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -97,6 +131,73 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } else {
             getLocation();
         }
+
+
+        recyclerView = findViewById(R.id.Recommended_recycler);
+        recyclerView1 = findViewById(R.id.RecommendedR_recycler);
+        recyclerView2 = findViewById(R.id.RecommendedD_recycler);
+        recyclerView3 = findViewById(R.id.RecommendedS_recycler);
+     //   recyclerView4 = findViewById(R.id.RecommendedSt_recycler);
+    //    recyclerView5 = findViewById(R.id.RecommendedDo_recycler);
+
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        recyclerView1.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView3.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+     //   recyclerView4.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    //    recyclerView5.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("RecommendedMarket");
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Recommended");
+        databaseReference2 = FirebaseDatabase.getInstance().getReference().child("RecommendedClean");
+        databaseReference3 = FirebaseDatabase.getInstance().getReference().child("RecommendedSalon");
+      //  databaseReference4 = FirebaseDatabase.getInstance().getReference().child("Recommended");
+     //   databaseReference5 = FirebaseDatabase.getInstance().getReference().child("Recommended");
+
+        Recommend = new ArrayList<>();
+        RecommendR = new ArrayList<>();
+        RecommendD = new ArrayList<>();
+        RecommendS = new ArrayList<>();
+
+
+        Query query = databaseReference.orderByChild("rating").startAt(4);
+        Query query1 = databaseReference1.orderByChild("rating").startAt(4);
+        Query query2 = databaseReference2.orderByChild("rating").startAt(4);
+        Query query3 = databaseReference3.orderByChild("rating").startAt(4);
+
+        FirebaseRecyclerOptions<PlacesClass> options =
+                new FirebaseRecyclerOptions.Builder<PlacesClass>()
+                        .setQuery(query, PlacesClass.class)
+                        .build();
+
+        FirebaseRecyclerOptions<PlacesClass> options1 =
+                new FirebaseRecyclerOptions.Builder<PlacesClass>()
+                        .setQuery(query1, PlacesClass.class)
+                        .build();
+
+        FirebaseRecyclerOptions<PlacesClass> options2 =
+                new FirebaseRecyclerOptions.Builder<PlacesClass>()
+                        .setQuery(query2, PlacesClass.class)
+                        .build();
+
+        FirebaseRecyclerOptions<PlacesClass> options3 =
+                new FirebaseRecyclerOptions.Builder<PlacesClass>()
+                        .setQuery(query3, PlacesClass.class)
+                        .build();
+
+        adapter = new RecommendAdapter(options);
+        adapter1 = new RecommendAdapter(options1);
+        adapter2 = new RecommendAdapter(options2);
+        adapter3 = new RecommendAdapter(options3);
+
+
+        recyclerView1.setAdapter(adapter1);
+        recyclerView2.setAdapter(adapter2);
+        recyclerView3.setAdapter(adapter3);
+
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -365,6 +466,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         });
     }
 
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+
+        adapter1.startListening();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
 
 
 }

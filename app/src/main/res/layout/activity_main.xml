@@ -10,6 +10,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -206,32 +207,146 @@
         </HorizontalScrollView>
 
 
+
         <LinearLayout
             android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recommended Restaurant"
-            android:textStyle="bold"
-            android:layout_marginTop="440dp"
 
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="433dp" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Recommended SuperMarket"
+    android:textStyle="bold"
+    android:layout_marginTop="440dp"
+
+    tools:layout_editor_absoluteX="16dp"
+    tools:layout_editor_absoluteY="433dp" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Recommended_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="460dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/top_background"
             android:scrollbars="vertical"
             android:padding="2dp"
             />
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recommended Restaurant"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="433dp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RecommendedR_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/top_background"
+        android:scrollbars="vertical"
+        android:padding="2dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recommended DryClean"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="433dp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RecommendedD_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/top_background"
+        android:scrollbars="vertical"
+        android:padding="2dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recommended Salon"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="433dp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RecommendedS_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/top_background"
+        android:scrollbars="vertical"
+        android:padding="2dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recommended StudyPlaces"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="433dp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RecommendedSt_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/top_background"
+        android:scrollbars="vertical"
+        android:padding="2dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recommended Dorms"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="433dp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RecommendedDo_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/top_background"
+        android:scrollbars="vertical"
+        android:padding="2dp"
+        />
+
+
+</LinearLayout>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
