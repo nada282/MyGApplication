@@ -63,6 +63,13 @@ public class FavouriteList extends AppCompatActivity implements BottomNavigation
         favAdapter.setOnItemClickListener(this);
 
         recyclerView.setAdapter(favAdapter);
+
+
+
+        bottom = findViewById(R.id.bottom);
+        bottom.setItemIconTintList(null);
+
+        bottom.setOnNavigationItemSelectedListener(this);
     }
 
     @Override
