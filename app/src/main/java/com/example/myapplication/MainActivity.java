@@ -198,7 +198,71 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         recyclerView3.setAdapter(adapter3);
 
         recyclerView.setAdapter(adapter);
+
+        setupAdapterClickListener();
+        setupAdapterClickListener1();
+        setupAdapterClickListener2();
+        setupAdapterClickListener3();
+
+
     }
+
+    private void setupAdapterClickListener() {
+        adapter.setOnItemClickListener((snapshot, position) -> {
+            PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+
+            Intent intent = new Intent(MainActivity.this, SupermarketItemList.class);
+            intent.putExtra("supermarket_id", snapshot.getKey());
+            intent.putExtra("supermarket_name", supermarket.getName());
+            intent.putExtra("supermarket_image", supermarket.getImage());
+
+            // Add any other necessary data as extras
+            startActivity(intent);
+        });
+    }
+
+    private void setupAdapterClickListener1() {
+        adapter1.setOnItemClickListener((snapshot, position) -> {
+            PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+
+            Intent intent = new Intent(MainActivity.this, RestaurantList.class);
+            intent.putExtra("restaurant_id", snapshot.getKey());
+            intent.putExtra("restaurant_name", supermarket.getName());
+            intent.putExtra("restaurant_image", supermarket.getImage());
+
+            // Add any other necessary data as extras
+            startActivity(intent);
+        });
+    }
+
+    private void setupAdapterClickListener2() {
+        adapter2.setOnItemClickListener((snapshot, position) -> {
+            PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+
+            Intent intent = new Intent(MainActivity.this, DryCleanList.class);
+            intent.putExtra("dryclean_id", snapshot.getKey());
+            intent.putExtra("dryclean_name", supermarket.getName());
+            intent.putExtra("dryclean_image", supermarket.getImage());
+
+            // Add any other necessary data as extras
+            startActivity(intent);
+        });
+    }
+    private void setupAdapterClickListener3() {
+        adapter3.setOnItemClickListener((snapshot, position) -> {
+            PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+
+            Intent intent = new Intent(MainActivity.this, SalonList.class);
+            intent.putExtra("salon_id", snapshot.getKey());
+            intent.putExtra("salon_name", supermarket.getName());
+            intent.putExtra("salon_image", supermarket.getImage());
+
+            // Add any other necessary data as extras
+            startActivity(intent);
+        });
+    }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
