@@ -89,7 +89,7 @@ public class Login_Fragment extends Fragment implements OnClickListener {
         shakeAnimation = AnimationUtils.loadAnimation(getActivity(),
                 R.anim.shake);
         // ...
-// Initialize Firebase Auth
+        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         // Setting text selector over textviews
         @SuppressLint("ResourceType") XmlResourceParser xrp = getResources().getXml(R.drawable.textview_selector);
@@ -201,20 +201,20 @@ public class Login_Fragment extends Fragment implements OnClickListener {
         }
         // Else do login and do your stuff
         else
-            mAuth.createUserWithEmailAndPassword(getEmailId, getPassword)
+            mAuth.signInWithEmailAndPassword(getEmailId, getPassword)
                     .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Toast.makeText(getActivity(), "Successful**", Toast.LENGTH_SHORT)
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT)
                                         .show();
                                 Intent intent = new Intent(getActivity(),MainActivity.class);
                                 startActivity(intent);
 
                             } else {
                                 // If sign in fails, display a message to the user.
-                                Toast.makeText(getActivity(), "Failed,Do Login.", Toast.LENGTH_SHORT)
+                                Toast.makeText(getActivity(), "Login failed. Please check your credentials.", Toast.LENGTH_SHORT)
                                         .show();
                             }
                         }
