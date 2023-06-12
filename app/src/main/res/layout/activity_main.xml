@@ -114,7 +114,7 @@
                         android:layout_height="130dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/salon" />
+                        android:src="@drawable/salonn" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -132,7 +132,7 @@
                         android:layout_height="130dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/market" />
+                        android:src="@drawable/superm" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -150,7 +150,7 @@
                         android:layout_height="130dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/dd" />
+                        android:src="@drawable/drycl" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -168,7 +168,7 @@
                         android:layout_height="130dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/resturant" />
+                        android:src="@drawable/res" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -186,7 +186,7 @@
                         android:layout_height="130dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/dorms4" />
+                        android:src="@drawable/dor" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -204,7 +204,7 @@
                         android:layout_height="130dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
-                        android:src="@drawable/study" />
+                        android:src="@drawable/st" />
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
         </HorizontalScrollView>
