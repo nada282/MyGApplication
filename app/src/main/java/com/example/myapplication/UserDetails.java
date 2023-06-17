@@ -5,16 +5,21 @@ import android.view.View;
 public class UserDetails {
     public String Name;
 
-    public String dob;
+//    public String dob;
     public String password;
-    public String gender ;
+//    public String gender ;
     public String Mobile;
+    public String Location;
 UserDetails(){}
-    UserDetails(String Name,String dob,String password,String gender,String  Mobile){
-        this.dob=dob;
+
+
+
+    UserDetails(String Name, String password, String  Mobile , String Location){
+    //    this.dob=dob;
         this.password=password;
-        this.gender=gender;
+      //  this.gender=gender;
         this.Mobile=Mobile;
+        this.Location=Location;
 
     }
 
@@ -26,13 +31,13 @@ UserDetails(){}
         Name = name;
     }
 
-    public String getDob() {
-        return dob;
-    }
-
-    public void setDob(String dob) {
-        this.dob = dob;
-    }
+//    public String getDob() {
+//        return dob;
+//    }
+//
+//    public void setDob(String dob) {
+//        this.dob = dob;
+//    }
 
     public String getPassword() {
         return password;
@@ -42,13 +47,13 @@ UserDetails(){}
         this.password = password;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+//    public String getGender() {
+//        return gender;
+//    }
+//
+//    public void setGender(String gender) {
+//        this.gender = gender;
+//    }
 
     public String getMobile() {
         return Mobile;
@@ -57,4 +62,13 @@ UserDetails(){}
     public void setMobile(String mobile) {
         Mobile = mobile;
     }
+
+    public String getLocation() {
+        return Location;
+    }
+
+    public void setLocation(String location) {
+        Location = location;
+    }
+
 }

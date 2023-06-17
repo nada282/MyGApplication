@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -31,7 +32,7 @@ public class Profile extends AppCompatActivity {
     private Button button,button2;
 
     //   private ProgressBar progressBar;
-    private String Name,Password,Email,Dob;
+    private String Name,Password,Email,Dob,Location;
     private ImageView imageView;
     private FirebaseAuth authFirebase;
     @SuppressLint("MissingInflatedId")
@@ -46,6 +47,7 @@ public class Profile extends AppCompatActivity {
         textLocation= findViewById(R.id.textLocation);
          button= findViewById(R.id.button);
          button2= findViewById(R.id.button2);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,12 +60,14 @@ public class Profile extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
                 Intent in2;
                 in2 = new Intent (Profile.this,Registration.class);
                 startActivity(in2);
-//                finish();
+                finish();
             }
         });
+
 //        progressBar =findViewById(R.id.progressBarr);
         authFirebase =FirebaseAuth.getInstance();
 
@@ -87,13 +91,14 @@ public class Profile extends AppCompatActivity {
                 if(details != null) {
                     Name = firebaseUser.getDisplayName();
                     Email = firebaseUser.getEmail();
-                    Dob = details.getDob();
+               //     Dob = details.getDob();
                     Password=details.getPassword();
-//                    Location =details.location;
+                    Location =details.Location;
                     textName.setText(Name);
                     textEmail.setText(Email);
                     textDob.setText(Dob);
                     textPassword.setText(Password);
+                    textLocation.setText(Location);
 
                 }
                 //   progressBar.setVisibility(View.GONE);
