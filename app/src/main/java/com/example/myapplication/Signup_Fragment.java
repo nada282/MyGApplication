@@ -172,7 +172,7 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
                                 if (user != null) {
                                     String userId = user.getUid();
                                     // Create a new document with the user's ID
-                                    DocumentReference userRef = db.collection("users").document(userId);
+                                    DocumentReference userRef = db.collection("User").document(userId);
 
                                     // Create a HashMap to store the user information
                                     Map<String, Object> userInfo = new HashMap<>();

@@ -191,14 +191,27 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void onItemClick(DataSnapshot snapshot, int position) {
-        ServicesClass salon = snapshot.getValue(ServicesClass.class);
+        ServicesClass dry = snapshot.getValue(ServicesClass.class);
+
+        String itemName = dry.getName();
+        String itemNimage = dry.getImage();
+
+
+        PlacesClass selectedItem = new PlacesClass(itemName,itemNimage);
+
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference recentlyViewedRef = databaseRef.child("RecentlyView");
+
+        recentlyViewedRef.child(itemName).setValue(selectedItem);
+
 
         Intent intent = new Intent(DryCleanList.this, ServiceDetails.class);
         intent.putExtra("id", snapshot.getKey());
-        intent.putExtra("name", salon.getName());
-        intent.putExtra("price", salon.getPrice());
-        intent.putExtra("desc", salon.getDescription());
-        intent.putExtra("image", salon.getImage());
+        intent.putExtra("name", dry.getName());
+        intent.putExtra("price", dry.getPrice());
+        intent.putExtra("desc", dry.getDescription());
+        intent.putExtra("image", dry.getImage());
 
         // Add any other necessary data as extras
         startActivity(intent);

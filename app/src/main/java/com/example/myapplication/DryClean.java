@@ -81,12 +81,15 @@ public class DryClean extends AppCompatActivity implements BottomNavigationView.
 
     private void setupAdapterClickListener() {
         adapter.setOnItemClickListener((snapshot, position) -> {
-            PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+            PlacesClass dry = snapshot.getValue(PlacesClass.class);
+
+
+
 
             Intent intent = new Intent(DryClean.this, DryCleanList.class);
             intent.putExtra("dryclean_id", snapshot.getKey());
-            intent.putExtra("dryclean_name", supermarket.getName());
-            intent.putExtra("dryclean_image", supermarket.getImage());
+            intent.putExtra("dryclean_name", dry.getName());
+            intent.putExtra("dryclean_image", dry.getImage());
 
             // Add any other necessary data as extras
             startActivity(intent);

@@ -83,6 +83,8 @@ public class Restaurant extends AppCompatActivity implements BottomNavigationVie
         adapter.setOnItemClickListener((snapshot, position) -> {
             PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
 
+
+
             Intent intent = new Intent(Restaurant.this, RestaurantList.class);
             intent.putExtra("restaurant_id", snapshot.getKey());
             intent.putExtra("restaurant_name", supermarket.getName());

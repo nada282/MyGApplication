@@ -183,14 +183,26 @@ public class RestaurantList extends AppCompatActivity implements BottomNavigatio
 
     @Override
     public void onItemClick(DataSnapshot snapshot, int position) {
-        ServicesClass service = snapshot.getValue(ServicesClass.class);
+        ServicesClass rest = snapshot.getValue(ServicesClass.class);
+
+        String itemName = rest.getName();
+        String itemNimage = rest.getImage();
+
+
+        PlacesClass selectedItem = new PlacesClass(itemName,itemNimage);
+
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference recentlyViewedRef = databaseRef.child("RecentlyView");
+
+        recentlyViewedRef.child(itemName).setValue(selectedItem);
 
         Intent intent = new Intent(RestaurantList.this, ServiceDetails.class);
         intent.putExtra("id", snapshot.getKey());
-        intent.putExtra("name", service.getName());
-        intent.putExtra("price", service.getPrice());
-        intent.putExtra("desc", service.getDescription());
-        intent.putExtra("image", service.getImage());
+        intent.putExtra("name", rest.getName());
+        intent.putExtra("price", rest.getPrice());
+        intent.putExtra("desc", rest.getDescription());
+        intent.putExtra("image", rest.getImage());
 
         // Add any other necessary data as extras
         startActivity(intent);

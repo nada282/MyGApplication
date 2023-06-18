@@ -184,6 +184,19 @@ public class SalonList extends AppCompatActivity implements BottomNavigationView
     public void onItemClick(DataSnapshot snapshot, int position) {
         ServicesClass salon = snapshot.getValue(ServicesClass.class);
 
+
+        String itemName = salon.getName();
+        String itemNimage = salon.getImage();
+
+
+        PlacesClass selectedItem = new PlacesClass(itemName,itemNimage);
+
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference recentlyViewedRef = databaseRef.child("RecentlyView");
+
+        recentlyViewedRef.child(itemName).setValue(selectedItem);
+
         Intent intent = new Intent(SalonList.this, ServiceDetails.class);
         intent.putExtra("id", snapshot.getKey());
         intent.putExtra("name", salon.getName());

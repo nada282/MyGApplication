@@ -81,12 +81,14 @@ public class Salon extends AppCompatActivity implements BottomNavigationView.OnN
 
     private void setupAdapterClickListener() {
         adapter.setOnItemClickListener((snapshot, position) -> {
-            PlacesClass supermarket = snapshot.getValue(PlacesClass.class);
+            PlacesClass salon = snapshot.getValue(PlacesClass.class);
+
+
 
             Intent intent = new Intent(Salon.this, SalonList.class);
             intent.putExtra("salon_id", snapshot.getKey());
-            intent.putExtra("salon_name", supermarket.getName());
-            intent.putExtra("salon_image", supermarket.getImage());
+            intent.putExtra("salon_name", salon.getName());
+            intent.putExtra("salon_image", salon.getImage());
 
             // Add any other necessary data as extras
             startActivity(intent);

@@ -19,6 +19,7 @@ public class PlacesClass {
 
     }
 
+
     public String getName() {
         return name;
     }
