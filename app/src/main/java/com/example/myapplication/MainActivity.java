@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
     ImageView love;
+    ImageView list;
+
+
     private List<PlacesClass> Recommend;
     private List<PlacesClass> RecommendR;
     private List<PlacesClass> RecommendD;
@@ -95,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         u.start();
 
         love = findViewById(R.id.love);
+        list = findViewById(R.id.Rlist);
+
 
         final DrawerLayout drawerLayout = findViewById(R.id.DrawerLayout);
         bottom = findViewById(R.id.bottom);
@@ -107,6 +112,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             @Override
             public void onClick(View view) {
                 Intent in = new Intent(MainActivity.this,FavouriteList.class);
+                startActivity(in);
+            }
+        });
+
+        list.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(MainActivity.this,RecentlyView.class);
                 startActivity(in);
             }
         });

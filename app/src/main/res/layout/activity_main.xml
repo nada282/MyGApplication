@@ -59,6 +59,15 @@
                 android:src="@drawable/baseline_favorite_24"
                 android:tint="@color/white" />
 
+            <ImageView
+                android:id="@+id/Rlist"
+                android:layout_width="38dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="75dp"
+                android:contentDescription="app-name"
+                android:src="@drawable/list"
+                android:tint="@color/white" />
+
 
             <TextView
                 android:id="@+id/title"

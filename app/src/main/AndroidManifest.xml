@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".RecentlyView"
+            android:exported="false" />
+        <activity
             android:name=".FavouriteList"
             android:exported="false" />
         <activity
