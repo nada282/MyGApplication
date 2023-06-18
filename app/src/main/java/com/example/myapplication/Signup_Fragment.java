@@ -51,9 +51,10 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            Toast.makeText(getActivity(), "Already signed in.", Toast.LENGTH_SHORT)
+            Toast.makeText(getActivity(), "Successfully", Toast.LENGTH_SHORT)
                     .show();
-          //  startActivity(new Intent(getActivity(), MainActivity.class));
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -68,6 +69,7 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
         initViews();
         setListeners();
         return view;
+
     }
 
     // Initialize all views
@@ -127,6 +129,8 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
         String getEmailId = email.getText().toString();
         String getMobileNumber = mobileNumber.getText().toString();
         String getLocation = location.getText().toString();
+
+
         String getPassword = password.getText().toString();
         String getConfirmPassword = confirmPassword.getText().toString();
 
@@ -168,7 +172,7 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
                                 if (user != null) {
                                     String userId = user.getUid();
                                     // Create a new document with the user's ID
-                                    DocumentReference userRef = db.collection("user").document(userId);
+                                    DocumentReference userRef = db.collection("users").document(userId);
 
                                     // Create a HashMap to store the user information
                                     Map<String, Object> userInfo = new HashMap<>();
@@ -183,9 +187,8 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     // Document successfully written
-                                                    Toast.makeText(getActivity(), "User information saved.", Toast.LENGTH_SHORT).show();
-                                                    startActivity(new Intent(getActivity(), MainActivity.class));
-                                                    getActivity().finish(); // Close the current activity
+                                                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                                                    startActivity(intent);
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -206,3 +209,4 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
         }
     }
 }
+

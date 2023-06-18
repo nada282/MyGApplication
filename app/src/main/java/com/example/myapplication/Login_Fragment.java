@@ -118,7 +118,7 @@ public class Login_Fragment extends Fragment implements OnClickListener {
                     public void onCheckedChanged(CompoundButton button,
                                                  boolean isChecked) {
 
-                        // If it is checkec then show password else hide
+                        // If it is checked then show password else hide
                         // password
                         if (isChecked) {
 
@@ -163,13 +163,20 @@ public class Login_Fragment extends Fragment implements OnClickListener {
                                 Utils.ForgotPassword_Fragment).commit();
                 break;
             case R.id.createAccount:
-
-                // Replace signup frgament with animation
+                // Replace login fragment with signup fragment
+//                fragmentManager
+//                        .beginTransaction()
+//                        .setCustomAnimations(R.anim.right_enter, R.anim.left_out)
+//                        .replace(R.id.frameContainer, new Signup_Fragment(), Utils.SignUp_Fragment)
+//                        .commit();
+//                break;
+                // Replace login fragment with signup fragment
                 fragmentManager
                         .beginTransaction()
                         .setCustomAnimations(R.anim.right_enter, R.anim.left_out)
-                        .replace(R.id.frameContainer, new Signup_Fragment(),
-                                Utils.SignUp_Fragment).commit();
+                        .replace(R.id.frameContainer, new Signup_Fragment(), Utils.SignUp_Fragment)
+                        .addToBackStack(null) // Add this line to add the fragment to the back stack
+                        .commit();
                 break;
         }
 

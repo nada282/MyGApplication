@@ -8,6 +8,7 @@ import android.view.View;
 
 public class Registration extends AppCompatActivity {
     private static FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
