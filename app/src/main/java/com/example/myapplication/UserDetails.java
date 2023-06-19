@@ -3,32 +3,36 @@ package com.example.myapplication;
 import android.view.View;
 
 public class UserDetails {
-    public String Name;
+    public String fullName;
 
 //    public String dob;
     public String password;
 //    public String gender ;
-    public String Mobile;
-    public String Location;
+    public String mobileNumber;
+    public String location;
+   public String email;
 UserDetails(){}
 
 
 
-    UserDetails(String Name, String password, String  Mobile , String Location){
+
+    UserDetails(String fullName, String password, String  mobileNumber , String location, String email){
+    this.fullName=fullName;
     //    this.dob=dob;
         this.password=password;
       //  this.gender=gender;
-        this.Mobile=Mobile;
-        this.Location=Location;
+        this.mobileNumber=mobileNumber;
+        this.location=location;
+        this.email=email;
 
     }
 
     public String getName() {
-        return Name;
+        return fullName;
     }
 
     public void setName(String name) {
-        Name = name;
+        name = name;
     }
 
 //    public String getDob() {
@@ -55,20 +59,27 @@ UserDetails(){}
 //        this.gender = gender;
 //    }
 
-    public String getMobile() {
-        return Mobile;
+    public String getMobileNumber() {
+        return mobileNumber;
     }
 
-    public void setMobile(String mobile) {
-        Mobile = mobile;
+    public void setMobileNumber(String mobile) {
+        mobileNumber = mobile;
     }
 
     public String getLocation() {
-        return Location;
+        return location;
     }
 
     public void setLocation(String location) {
-        Location = location;
+        location = location;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
