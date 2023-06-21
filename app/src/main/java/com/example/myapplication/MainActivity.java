@@ -328,6 +328,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 startActivity(in1);
                 return true;
             case R.id.profile:
+
                 // check if the user logged in or not
                 userLoggedIn = checkUserLoggedIn();
                 // Navigate to the appropriate fragment
