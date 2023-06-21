@@ -15,12 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class DryCleanList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener ,ItemListAdapter.OnItemClickListener{
 
@@ -60,9 +66,9 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
                 .into(restaurantImageView);
 
 
-         drycleanId = intent.getStringExtra("dryclean_id");
-         drycleanName = intent.getStringExtra("dryclean_name");
-         drycleanImageUrl = intent.getStringExtra("dryclean_image");
+        drycleanId = intent.getStringExtra("dryclean_id");
+        drycleanName = intent.getStringExtra("dryclean_name");
+        drycleanImageUrl = intent.getStringExtra("dryclean_image");
 
         // Set the title of the action bar to the name of the selected salon
 
@@ -88,6 +94,20 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
 
         bottom.setOnNavigationItemSelectedListener(this);
 
+
+        CollectionReference userRatingCollectionRef = FirebaseFirestore.getInstance().collection("User");
+        DocumentReference userRatingDocRef = userRatingCollectionRef.document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DocumentReference restaurantRatingDocRef = userRatingDocRef.collection("Rating").document(drycleanId);
+        restaurantRatingDocRef.addSnapshotListener((documentSnapshot, e) -> {
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                Float ratingValue = documentSnapshot.getDouble("rating").floatValue();
+                rating.setRating(ratingValue);
+            } else {
+                // If the restaurant doesn't exist in the user's ratings, set the rating to zero
+                rating.setRating(0.0f);
+            }
+        });
+
         rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -110,37 +130,33 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
                 return true;
             }
         });
+        rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> updateRating(rating));
 
-        DatabaseReference restaurantRef = FirebaseDatabase.getInstance().getReference().child("DryClean");
-        Query query1 = restaurantRef.orderByChild("name").equalTo(drycleanName);
-        query1.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                        Float ratingValue = childSnapshot.child("rating").getValue(Float.class);
-                        float ratingFloat = ratingValue != null ? ratingValue : 0.0f;
-                        rating.setRating(ratingFloat);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle the error if needed
-            }
-        });
     }
+
 
     private void updateRating(float rating) {
-        DatabaseReference restaurantRef = FirebaseDatabase.getInstance().getReference().child("DryClean");
-        restaurantRef.child(drycleanId).child("rating").setValue(rating);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        DatabaseReference recommendedRef = FirebaseDatabase.getInstance().getReference().child("RecommendedClean");
-        recommendedRef.child(drycleanId).child("rating").setValue(rating);
-        recommendedRef.child(drycleanId).child("name").setValue(drycleanName);
-        recommendedRef.child(drycleanId).child("image").setValue(drycleanImageUrl);
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        CollectionReference userRatingCollectionRef = firestore.collection("User");
+        DocumentReference userRatingDocRef = userRatingCollectionRef.document(userId);
+        DocumentReference restaurantRatingDocRef = userRatingDocRef.collection("Rating").document(drycleanId);
+
+        // Create a new document for the restaurant with the user's rating
+        HashMap<String, Object> ratingData = new HashMap<>();
+        ratingData.put("name", drycleanName);
+        ratingData.put("image", drycleanImageUrl);
+        ratingData.put("rating", rating);
+        restaurantRatingDocRef.set(ratingData)
+                .addOnSuccessListener(aVoid -> {
+                    // Rating updated successfully
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the failure to update the rating
+                });
     }
+
 
     private void searchFirebase(String query) {
         Query searchQuery = servicesRef.orderByChild("name")
@@ -191,29 +207,40 @@ public class DryCleanList extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void onItemClick(DataSnapshot snapshot, int position) {
-        ServicesClass dry = snapshot.getValue(ServicesClass.class);
+        ServicesClass rest = snapshot.getValue(ServicesClass.class);
 
-        String itemName = dry.getName();
-        String itemNimage = dry.getImage();
+        String id = rest.getId();
+        String itemName = rest.getName();
+        String itemImage = rest.getImage();
+        double price = rest.getPrice();
 
-
-        PlacesClass selectedItem = new PlacesClass(itemName,itemNimage);
-
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
-
-        DatabaseReference recentlyViewedRef = databaseRef.child("RecentlyView");
-
-        recentlyViewedRef.child(itemName).setValue(selectedItem);
+        ServicesClass selectedItem = new ServicesClass(id,itemName, itemImage,price);
 
 
-        Intent intent = new Intent(DryCleanList.this, ServiceDetails.class);
-        intent.putExtra("id", snapshot.getKey());
-        intent.putExtra("name", dry.getName());
-        intent.putExtra("price", dry.getPrice());
-        intent.putExtra("desc", dry.getDescription());
-        intent.putExtra("image", dry.getImage());
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        CollectionReference recentlyViewedRef = firestore.collection("User")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())// Replace "userId" with the actual user ID
+                .collection("RecentlyV");
+        DocumentReference documentRef = recentlyViewedRef.document(itemName);
 
-        // Add any other necessary data as extras
-        startActivity(intent);
+        documentRef.set(selectedItem)
+                .addOnSuccessListener(aVoid -> {
+                    // Successfully added the item to RecentlyV collection
+                    // Proceed with starting the ServiceDetails activity
+                    Intent intent = new Intent(DryCleanList.this, ServiceDetails.class);
+                    intent.putExtra("id", snapshot.getKey());
+                    intent.putExtra("name", rest.getName());
+                    intent.putExtra("price", rest.getPrice());
+                    intent.putExtra("desc", rest.getDescription());
+                    intent.putExtra("image", rest.getImage());
+
+                    // Add any other necessary data as extras
+                    startActivity(intent);
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the failure to add the item to RecentlyV collection
+                    // Display an error message or take appropriate action
+                });
     }
+
 }

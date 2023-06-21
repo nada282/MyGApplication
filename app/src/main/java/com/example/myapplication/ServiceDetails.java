@@ -83,7 +83,7 @@ public class ServiceDetails extends AppCompatActivity {
                 favorite.setColorFilter(Color.WHITE);
                 Toast.makeText(ServiceDetails.this, "Removed from favorites", Toast.LENGTH_SHORT).show();
             } else {
-                PlacesClass newItem = new PlacesClass(salonId, salonName, salonImageUrl);
+                ServicesClass newItem = new ServicesClass(salonId, salonName, salonImageUrl, salonPrice);
                 addToFavorites(newItem);
                 favorite.setColorFilter(Color.RED);
                 Toast.makeText(ServiceDetails.this, "Added to favorites", Toast.LENGTH_SHORT).show();
@@ -97,7 +97,7 @@ public class ServiceDetails extends AppCompatActivity {
                 .into(serviceImageView);
     }
 
-    private void addToFavorites(PlacesClass item) {
+    private void addToFavorites(ServicesClass item) {
         favoritesRef.document(item.getId()).set(item)
                 .addOnSuccessListener(aVoid -> {
 

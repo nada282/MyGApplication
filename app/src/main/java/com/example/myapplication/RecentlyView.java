@@ -8,89 +8,60 @@ import android.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecentlyView extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, PlacesAdapter.OnItemClickListener {
+public class RecentlyView extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, UserAdapter.OnItemClickListener {
 
-    private RecyclerView recentlyViewedRecyclerView;
+    private RecyclerView recyclerView;
     private BottomNavigationView bottom;
-    private PlacesAdapter adapter;
-    private List<PlacesClass> recentlyViewedList;
+    private UserAdapter adapter;
+
+   // private List<PlacesClass> recentlyViewedList;
     private SearchView searchView;
-    private DatabaseReference databaseRef;
+    private CollectionReference recentlyViewedRef;
+    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recently_view);
 
-        // Get a reference to the Firebase Realtime Database
-        databaseRef = FirebaseDatabase.getInstance().getReference();
+        recyclerView = findViewById(R.id.Recently_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recentlyViewedRecyclerView = findViewById(R.id.Recently_recycler);
-        recentlyViewedRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference favoritesRef = db.collection("User")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .collection("RecentlyV");
 
-        DatabaseReference recentlyViewedRef = databaseRef.child("RecentlyView");
-
-        recentlyViewedList = new ArrayList<>();
-
-        Query query = recentlyViewedRef.orderByChild("name");
-
-        FirebaseRecyclerOptions<PlacesClass> options =
-                new FirebaseRecyclerOptions.Builder<PlacesClass>()
-                        .setQuery(query, PlacesClass.class)
+        FirestoreRecyclerOptions<ServicesClass> options =
+                new FirestoreRecyclerOptions.Builder<ServicesClass>()
+                        .setQuery(favoritesRef, ServicesClass.class)
                         .build();
 
-        adapter = new PlacesAdapter(options);
-        recentlyViewedRecyclerView.setAdapter(adapter);
+        adapter = new UserAdapter(options);
         adapter.setOnItemClickListener(this);
+
+        recyclerView.setAdapter(adapter);
 
         bottom = findViewById(R.id.bottom);
         bottom.setItemIconTintList(null);
         bottom.setOnNavigationItemSelectedListener(this);
-
-        searchView = findViewById(R.id.search);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Do nothing when the search query is submitted
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // Call searchFirebase method to filter the data based on the entered query
-                searchFirebase(newText);
-                return true;
-            }
-        });
-    }
-
-    private void searchFirebase(String query) {
-        Query searchQuery = databaseRef.orderByChild("name")
-                .startAt(query)
-                .endAt(query + "\uf8ff");
-
-        FirebaseRecyclerOptions<PlacesClass> options =
-                new FirebaseRecyclerOptions.Builder<PlacesClass>()
-                        .setQuery(searchQuery, PlacesClass.class)
-                        .build();
-
-        adapter.updateOptions(options);
     }
 
     @Override
@@ -125,22 +96,21 @@ public class RecentlyView extends AppCompatActivity implements BottomNavigationV
         return false;
     }
 
-    public void onItemClick(DataSnapshot snapshot, int position) {
-        ServicesClass dry = snapshot.getValue(ServicesClass.class);
-
-        Intent intent = new Intent(RecentlyView.this, ServiceDetails.class);
-        intent.putExtra("id", snapshot.getKey());
-        intent.putExtra("name", dry.getName());
-        intent.putExtra("price", dry.getPrice());
-        intent.putExtra("desc", dry.getDescription());
-        intent.putExtra("image", dry.getImage());
-
-        // Add any other necessary data as extras
-        startActivity(intent);
-    }
-
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        super.onPointerCaptureChanged(hasCapture);
+    public void onItemClick(DocumentSnapshot snapshot, int position) {
+        ServicesClass place = snapshot.toObject(ServicesClass.class);
+
+        if (place != null) {
+            Intent intent = new Intent(RecentlyView.this, ServiceDetails.class);
+            intent.putExtra("id", snapshot.getId());
+            intent.putExtra("name", place.getName());
+            intent.putExtra("price", place.getPrice());
+            intent.putExtra("desc", place.getDescription());
+            intent.putExtra("image", place.getImage());
+
+            // Add any other necessary data as extras
+            startActivity(intent);
+        }
     }
+
 }

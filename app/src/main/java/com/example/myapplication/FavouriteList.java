@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -29,16 +30,16 @@ public class FavouriteList extends AppCompatActivity implements BottomNavigation
         setContentView(R.layout.activity_favourite_list);
 
         recyclerView = findViewById(R.id.Favourite_recycler);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference favoritesRef = db.collection("User")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .collection("favorite");
 
-        FirestoreRecyclerOptions<PlacesClass> options =
-                new FirestoreRecyclerOptions.Builder<PlacesClass>()
-                        .setQuery(favoritesRef, PlacesClass.class)
+        FirestoreRecyclerOptions<ServicesClass> options =
+                new FirestoreRecyclerOptions.Builder<ServicesClass>()
+                        .setQuery(favoritesRef, ServicesClass.class)
                         .build();
 
         favAdapter = new UserAdapter(options);
@@ -87,14 +88,17 @@ public class FavouriteList extends AppCompatActivity implements BottomNavigation
     public void onItemClick(DocumentSnapshot snapshot, int position) {
         ServicesClass place = snapshot.toObject(ServicesClass.class);
 
-        Intent intent = new Intent(FavouriteList.this, ServiceDetails.class);
-        intent.putExtra("id", snapshot.getId());
-        intent.putExtra("name", place.getName());
-        intent.putExtra("price", place.getPrice());
-        intent.putExtra("desc", place.getDescription());
-        intent.putExtra("image", place.getImage());
+        if (place != null) {
+            Intent intent = new Intent(FavouriteList.this, ServiceDetails.class);
+            intent.putExtra("id", snapshot.getId());
+            intent.putExtra("name", place.getName());
+            intent.putExtra("price", place.getPrice());
+            intent.putExtra("desc", place.getDescription());
+            intent.putExtra("image", place.getImage());
 
-        // Add any other necessary data as extras
-        startActivity(intent);
+            // Add any other necessary data as extras
+            startActivity(intent);
+        }
     }
+
 }

@@ -15,12 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class SalonList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ItemListAdapter.OnItemClickListener {
 
@@ -78,6 +84,19 @@ public class SalonList extends AppCompatActivity implements BottomNavigationView
 
         bottom.setOnNavigationItemSelectedListener(this);
 
+        CollectionReference userRatingCollectionRef = FirebaseFirestore.getInstance().collection("User");
+        DocumentReference userRatingDocRef = userRatingCollectionRef.document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DocumentReference restaurantRatingDocRef = userRatingDocRef.collection("Rating").document(salonId);
+        restaurantRatingDocRef.addSnapshotListener((documentSnapshot, e) -> {
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                Float ratingValue = documentSnapshot.getDouble("rating").floatValue();
+                rating.setRating(ratingValue);
+            } else {
+                // If the restaurant doesn't exist in the user's ratings, set the rating to zero
+                rating.setRating(0.0f);
+            }
+        });
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -94,46 +113,39 @@ public class SalonList extends AppCompatActivity implements BottomNavigationView
         });
 
 
-        DatabaseReference salonRef = FirebaseDatabase.getInstance().getReference().child("salon");
-        Query query1 = salonRef.orderByChild("name").equalTo(salonName);
-        query1.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                        Float ratingValue = childSnapshot.child("rating").getValue(Float.class);
-                        float ratingFloat = ratingValue != null ? ratingValue : 0.0f;
-                        rating.setRating(ratingFloat);
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle the error if needed
-            }
-        });
+        rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> updateRating(rating));
 
-
-        rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                updateRating(rating);
-            }
-        });
 
     }
 
     private void updateRating(float rating) {
-        DatabaseReference salonRef = FirebaseDatabase.getInstance().getReference().child("salon");
-        salonRef.child(salonId).child("rating").setValue(rating);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        CollectionReference userRatingCollectionRef = firestore.collection("User");
+        DocumentReference userRatingDocRef = userRatingCollectionRef.document(userId);
+        DocumentReference restaurantRatingDocRef = userRatingDocRef.collection("Rating").document(salonId);
 
-        DatabaseReference recommendedRef = FirebaseDatabase.getInstance().getReference().child("RecommendedSalon");
+        // Create a new document for the restaurant with the user's rating
+        HashMap<String, Object> ratingData = new HashMap<>();
+        ratingData.put("name", salonName);
+        ratingData.put("image", salonImage);
+        ratingData.put("rating", rating);
+        restaurantRatingDocRef.set(ratingData)
+                .addOnSuccessListener(aVoid -> {
+                    // Rating updated successfully
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the failure to update the rating
+                });
+    }
+
+     /*   DatabaseReference recommendedRef = FirebaseDatabase.getInstance().getReference().child("RecommendedSalon");
         recommendedRef.child(salonId).child("rating").setValue(rating);
         recommendedRef.child(salonId).child("name").setValue(salonName);
-        recommendedRef.child(salonId).child("image").setValue(salonImage);
-    }
+        recommendedRef.child(salonId).child("image").setValue(salonImage);*/
+
 
     private void searchFirebase(String query) {
         Query searchQuery = servicesRef.orderByChild("name")
@@ -182,29 +194,39 @@ public class SalonList extends AppCompatActivity implements BottomNavigationView
 
     @Override
     public void onItemClick(DataSnapshot snapshot, int position) {
-        ServicesClass salon = snapshot.getValue(ServicesClass.class);
+        ServicesClass rest = snapshot.getValue(ServicesClass.class);
 
+        String id = rest.getId();
+        String itemName = rest.getName();
+        String itemImage = rest.getImage();
+        double price = rest.getPrice();
 
-        String itemName = salon.getName();
-        String itemNimage = salon.getImage();
+        ServicesClass selectedItem = new ServicesClass(id,itemName, itemImage,price);
 
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        CollectionReference recentlyViewedRef = firestore.collection("User")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())// Replace "userId" with the actual user ID
+                .collection("RecentlyV");
+        DocumentReference documentRef = recentlyViewedRef.document(itemName);
 
-        PlacesClass selectedItem = new PlacesClass(itemName,itemNimage);
+        documentRef.set(selectedItem)
+                .addOnSuccessListener(aVoid -> {
+                    // Successfully added the item to RecentlyV collection
+                    // Proceed with starting the ServiceDetails activity
+                    Intent intent = new Intent(SalonList.this, ServiceDetails.class);
+                    intent.putExtra("id", snapshot.getKey());
+                    intent.putExtra("name", rest.getName());
+                    intent.putExtra("price", rest.getPrice());
+                    intent.putExtra("desc", rest.getDescription());
+                    intent.putExtra("image", rest.getImage());
 
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
-
-        DatabaseReference recentlyViewedRef = databaseRef.child("RecentlyView");
-
-        recentlyViewedRef.child(itemName).setValue(selectedItem);
-
-        Intent intent = new Intent(SalonList.this, ServiceDetails.class);
-        intent.putExtra("id", snapshot.getKey());
-        intent.putExtra("name", salon.getName());
-        intent.putExtra("price", salon.getPrice());
-        intent.putExtra("desc", salon.getDescription());
-        intent.putExtra("image", salon.getImage());
-
-        // Add any other necessary data as extras
-        startActivity(intent);
+                    // Add any other necessary data as extras
+                    startActivity(intent);
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the failure to add the item to RecentlyV collection
+                    // Display an error message or take appropriate action
+                });
     }
+
 }

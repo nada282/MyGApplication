@@ -13,26 +13,37 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
-public class UserAdapter extends FirestoreRecyclerAdapter<PlacesClass, UserAdapter.SalonViewHolder> {
+public class UserAdapter extends FirestoreRecyclerAdapter<ServicesClass, UserAdapter.SalonViewHolder> {
 
     private OnItemClickListener listener;
 
-    public UserAdapter(@NonNull FirestoreRecyclerOptions<PlacesClass> options) {
+    public UserAdapter(@NonNull FirestoreRecyclerOptions<ServicesClass> options) {
         super(options);
     }
 
-    @Override
-    protected void onBindViewHolder(@NonNull SalonViewHolder holder, int position, @NonNull PlacesClass model) {
-        holder.bind(model);
+    public void updateData(Query query) {
+        FirestoreRecyclerOptions<ServicesClass> options =
+                new FirestoreRecyclerOptions.Builder<ServicesClass>()
+                        .setQuery(query, ServicesClass.class)
+                        .build();
+
+        updateOptions(options);
     }
 
+
+    @Override
+    protected void onBindViewHolder(@NonNull SalonViewHolder holder, int position, @NonNull ServicesClass model) {
+        holder.bind(model);
+    }
 
     @NonNull
     @Override
     public SalonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.homecard_view, parent, false);
+                .inflate(R.layout.item_list, parent, false);
         return new SalonViewHolder(view);
     }
 
@@ -40,38 +51,46 @@ public class UserAdapter extends FirestoreRecyclerAdapter<PlacesClass, UserAdapt
         this.listener = listener;
     }
 
-
     public class SalonViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView mImageView;
-        private TextView mNameTextView;
-
+        private ImageView serviceimage;
+        private TextView name;
+        private TextView price;
+        // Add more TextViews or views as needed
 
         public SalonViewHolder(View itemView) {
             super(itemView);
-            mImageView = itemView.findViewById(R.id.image);
-            mNameTextView = itemView.findViewById(R.id.txtName);
+            serviceimage = itemView.findViewById(R.id.productImage);
+            name = itemView.findViewById(R.id.productName);
+            price = itemView.findViewById(R.id.productPrice);
 
             itemView.setOnClickListener(this);
         }
 
-        public void bind(PlacesClass salon) {
-            Glide.with(mImageView.getContext())
+        public void bind(ServicesClass salon) {
+            Glide.with(serviceimage.getContext())
                     .load(salon.getImage())
-                    .into(mImageView);
-            mNameTextView.setText(salon.getName());
+                    .into(serviceimage);
+            name.setText(salon.getName());
+
+
+            price.setText(String.valueOf(salon.getPrice()));
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION && listener != null) {
-                listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                DocumentSnapshot snapshot = getSnapshots().getSnapshot(position);
+                listener.onItemClick(snapshot, position);
             }
         }
     }
 
     public interface OnItemClickListener {
         void onItemClick(DocumentSnapshot snapshot, int position);
+    }
+    public int getItemCount() {
+        return getSnapshots().size();
     }
 }
