@@ -21,6 +21,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,8 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private DatabaseReference databaseReference4;
     private DatabaseReference databaseReference5;
 
+    private boolean userLoggedIn ;
+
 
     private RecyclerView recyclerView;
     private RecyclerView recyclerView1;
@@ -83,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private List<PlacesClass> RecommendDo;
 
 
-
-
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient mFusedLocationClient;
 
@@ -101,6 +105,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         list = findViewById(R.id.Rlist);
 
 
+
+
+
+
         final DrawerLayout drawerLayout = findViewById(R.id.DrawerLayout);
         bottom = findViewById(R.id.bottom);
 
@@ -111,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(MainActivity.this,FavouriteList.class);
+                Intent in = new Intent(MainActivity.this, FavouriteList.class);
                 startActivity(in);
             }
         });
@@ -121,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(MainActivity.this,RecentlyView.class);
+                Intent in = new Intent(MainActivity.this, RecentlyView.class);
                 startActivity(in);
             }
         });
@@ -152,8 +160,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         recyclerView1 = findViewById(R.id.RecommendedR_recycler);
         recyclerView2 = findViewById(R.id.RecommendedD_recycler);
         recyclerView3 = findViewById(R.id.RecommendedS_recycler);
-     //   recyclerView4 = findViewById(R.id.RecommendedSt_recycler);
-    //    recyclerView5 = findViewById(R.id.RecommendedDo_recycler);
+        //   recyclerView4 = findViewById(R.id.RecommendedSt_recycler);
+        //    recyclerView5 = findViewById(R.id.RecommendedDo_recycler);
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -161,15 +169,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         recyclerView1.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView3.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-     //   recyclerView4.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-    //    recyclerView5.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        //   recyclerView4.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        //    recyclerView5.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("RecommendedMarket");
         databaseReference1 = FirebaseDatabase.getInstance().getReference().child("Recommended");
         databaseReference2 = FirebaseDatabase.getInstance().getReference().child("RecommendedClean");
         databaseReference3 = FirebaseDatabase.getInstance().getReference().child("RecommendedSalon");
-      //  databaseReference4 = FirebaseDatabase.getInstance().getReference().child("Recommended");
-     //   databaseReference5 = FirebaseDatabase.getInstance().getReference().child("Recommended");
+        //  databaseReference4 = FirebaseDatabase.getInstance().getReference().child("Recommended");
+        //   databaseReference5 = FirebaseDatabase.getInstance().getReference().child("Recommended");
 
         Recommend = new ArrayList<>();
         RecommendR = new ArrayList<>();
@@ -221,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
     }
+
 
     private void setupAdapterClickListener() {
         adapter.setOnItemClickListener((snapshot, position) -> {
@@ -319,9 +328,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 startActivity(in1);
                 return true;
             case R.id.profile:
-                Intent in2 = new Intent(this, Profile.class);
-                startActivity(in2);
+                // check if the user logged in or not
+                userLoggedIn = checkUserLoggedIn();
+                // Navigate to the appropriate fragment
+                if (userLoggedIn) {
+                    openProfileActivity();
+                } else {
+                    openLoginFragment();
+                }
                 return true;
+//                Intent in2 = new Intent(this, Profile.class);
+//                startActivity(in2);
+//                return true;
         }
         return false;
     }
@@ -557,6 +575,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+
+    private boolean checkUserLoggedIn() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return user != null;
+
+    }
+
+    private void openProfileActivity() {
+        Intent intent = new Intent(this, Profile.class);
+        startActivity(intent);
+    }
+
+    private void openLoginFragment() {
+        Intent intent = new Intent(this, Registration.class);
+        startActivity(intent);
     }
 
 

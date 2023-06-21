@@ -7,6 +7,11 @@ plugins {
 android {
     compileSdk 33
 
+        packagingOptions {
+            exclude 'META-INF/NOTICE.md'
+            exclude 'META-INF/LICENSE.md'
+        }
+
     defaultConfig {
         applicationId "com.example.myapplication"
         minSdk 29
@@ -70,6 +75,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.2.1'
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.firebase:firebase-firestore:23.0.1'
+    implementation 'com.sun.mail:android-mail:1.6.6'
+    implementation 'com.sun.mail:android-activation:1.6.6'
 
 }
 
