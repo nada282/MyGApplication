@@ -10,30 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.util.List;
-
-public class PlacesAdapter extends FirebaseRecyclerAdapter<PlacesClass, PlacesAdapter.SalonViewHolder> {
+public class UserAdapter extends FirestoreRecyclerAdapter<PlacesClass, UserAdapter.SalonViewHolder> {
 
     private OnItemClickListener listener;
 
-    public PlacesAdapter(@NonNull FirebaseRecyclerOptions<PlacesClass> options) {
+    public UserAdapter(@NonNull FirestoreRecyclerOptions<PlacesClass> options) {
         super(options);
     }
-
-
 
     @Override
     protected void onBindViewHolder(@NonNull SalonViewHolder holder, int position, @NonNull PlacesClass model) {
         holder.bind(model);
-
     }
-
 
 
     @NonNull
@@ -47,6 +39,7 @@ public class PlacesAdapter extends FirebaseRecyclerAdapter<PlacesClass, PlacesAd
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
+
 
     public class SalonViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -79,7 +72,6 @@ public class PlacesAdapter extends FirebaseRecyclerAdapter<PlacesClass, PlacesAd
     }
 
     public interface OnItemClickListener {
-        void onItemClick(DataSnapshot snapshot, int position);
-
+        void onItemClick(DocumentSnapshot snapshot, int position);
     }
 }
