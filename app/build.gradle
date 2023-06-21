@@ -74,6 +74,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.2.1'
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.firebase:firebase-firestore:23.0.1'
+    implementation 'com.google.firebase:firebase-database:20.0.0'
+    implementation 'com.firebaseui:firebase-ui-database:7.2.0'
+    implementation 'com.google.firebase:firebase-firestore:24.0.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'
 
 }
 
