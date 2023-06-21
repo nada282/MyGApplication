@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,8 +15,10 @@ import java.util.regex.Pattern;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,6 +51,7 @@ public class Login_Fragment extends Fragment implements OnClickListener {
     private static Animation shakeAnimation;
     private static FragmentManager fragmentManager;
     private FirebaseAuth mAuth;
+
 
     @Override
     public void onStart() {
@@ -154,13 +159,50 @@ public class Login_Fragment extends Fragment implements OnClickListener {
 
             case R.id.forgot_password:
 
-                // Replace forgot password fragment with animation
-                fragmentManager
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.right_enter, R.anim.left_out)
-                        .replace(R.id.frameContainer,
-                                new ForgotPassword_Fragment(),
-                                Utils.ForgotPassword_Fragment).commit();
+//                // Replace forgot password fragment with animation
+//                fragmentManager
+//                        .beginTransaction()
+//                        .setCustomAnimations(R.anim.right_enter, R.anim.left_out)
+//                        .replace(R.id.frameContainer,
+//                                new ForgotPassword_Fragment(),
+//                                Utils.ForgotPassword_Fragment).commit();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_forgot, null);
+                EditText emailBox = dialogView.findViewById(R.id.emailBox);
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String userEmail = emailBox.getText().toString();
+                        if (TextUtils.isEmpty(userEmail) || !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()) {
+                            Toast.makeText(getActivity(), "Enter a valid email address", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        mAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getActivity(), "Check your email", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(getActivity(), "Unable to send, please try again", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                });
+
+                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                }
+                dialog.show();
                 break;
             case R.id.createAccount:
                 // Replace login fragment with signup fragment

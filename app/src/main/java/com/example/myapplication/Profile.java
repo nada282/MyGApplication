@@ -35,7 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 
 public class Profile extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private TextView textName , textView;
+    private TextView textName , title;
     private TextView textPassword;
     private TextView textEmail;
    // private TextView textDob;
@@ -63,9 +63,14 @@ public class Profile extends AppCompatActivity implements BottomNavigationView.O
         //  textDob = findViewById(R.id.textDob);
         textLocation = findViewById(R.id.textLocation);
         textMobile = findViewById(R.id.textMobile);
-        textView = findViewById(R.id.textView);
+        title = findViewById(R.id.title);
        // button = findViewById(R.id.button);
         button2 = findViewById(R.id.button2);
+
+        bottom = findViewById(R.id.bottom);
+        bottom.setItemIconTintList(null);
+
+        bottom.setOnNavigationItemSelectedListener(this);
 
 //        button.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -173,7 +178,7 @@ public class Profile extends AppCompatActivity implements BottomNavigationView.O
 //                        textPassword.setText(password);
                         textLocation.setText(location);
                         textMobile.setText(mobile);
-                        textView.setText(name);
+                        title.setText(name);
 
 //                        Name = firebaseUser.getDisplayName();
 //                        Email = firebaseUser.getEmail();

@@ -18,6 +18,7 @@ import com.example.myapplication.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,11 +43,28 @@ public class ServiceDetails extends AppCompatActivity {
         setContentView(R.layout.activity_service_details);
 
         favorite = findViewById(R.id.favoriteList);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // User is authenticated, continue with accessing user information
+            String uid = user.getUid();
+            favoritesRef = FirebaseFirestore.getInstance()
+                    .collection("User")
+                    .document(uid)
+                    .collection("favorite");
+            // Rest of your code
+        } else {
 
-        favoritesRef = FirebaseFirestore.getInstance()
-                .collection("User")
-                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .collection("favorite");
+            Intent intent = new Intent(this, Registration.class);
+            startActivity(intent);
+            finish(); // Optional: Close the current activity to prevent the user from navigating back
+
+            // User is not authenticated, handle this case accordingly
+            Toast.makeText(this, "Please log in to access this feature.", Toast.LENGTH_SHORT).show();
+
+        }
+
+
+
 
         serviceImageView = findViewById(R.id.productImage);
         serviceNameTextView = findViewById(R.id.productName);
