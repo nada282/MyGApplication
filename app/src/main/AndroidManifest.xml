@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +16,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+        <activity
+            android:name=".Seeting"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
         <activity
             android:name=".FavouriteList"
             android:exported="false" />
@@ -82,21 +88,19 @@
         <activity
             android:name=".Map"
             android:exported="false"
-            android:label="@string/title_activity_map" />
-<!--         <activity-->
-<!--         android:name=".Signup_Fragment"-->
-<!--         android:exported="false"-->
-<!--             android:enableOnBackInvokedCallback="true"/>-->
-<!--        />-->
-<!--         <activity-->
-<!--         android:name=".Login_Fragment"-->
-<!--         android:exported="false"-->
-<!--             android:enableOnBackInvokedCallback="true"/>-->
-        />
+            android:label="@string/title_activity_map" /> <!-- <activity -->
+        <!-- android:name=".Signup_Fragment" -->
+        <!-- android:exported="false" -->
+        <!-- android:enableOnBackInvokedCallback="true"/> -->
+        <!-- /> -->
+        <!-- <activity -->
+        <!-- android:name=".Login_Fragment" -->
+        <!-- android:exported="false" -->
+        <!-- android:enableOnBackInvokedCallback="true"/> -->
         <activity
             android:name=".Registration"
-            android:exported="false"
-            android:enableOnBackInvokedCallback="true"/>
+            android:enableOnBackInvokedCallback="true"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false">

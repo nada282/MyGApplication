@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+android:title="home ">
+        <SwitchPreference
+            android:key="theme_preference"
+            android:defaultValue="false"
+            android:title="Dark theme"
+
+        />
+        <Preference
+            android:key="import_preference"
+            android:summary="import DataBase"
+            android:title="Import"/>
+        <Preference
+            android:key="Export_preference"
+            android:summary="export DataBase"
+            android:title="Export"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title=" About">
+        <Preference
+            android:summary="1.0.0"
+            android:title="Version"/>
+        <Preference
+            android:key="content_preference"
+            android:title="About Us"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>
