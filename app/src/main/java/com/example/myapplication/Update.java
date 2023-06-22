@@ -149,7 +149,7 @@ public class Update extends AppCompatActivity {
                     //  Dob=details.getDob();
                     Password=details.getPassword();
                   //  gender=details.getGender();
-                    mobile=details.getMobile();
+                    mobile=details.getMobileNumber();
                     // Location=details.location;
 
                     // Check if dob is null before assigning it to Dob variable

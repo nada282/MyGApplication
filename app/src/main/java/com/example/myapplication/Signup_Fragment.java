@@ -32,7 +32,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -44,7 +43,7 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
     private Button signUpButton;
     private CheckBox terms_conditions;
     private FirebaseAuth mAuth;
-    private FirebaseFirestore db ;
+    private FirebaseFirestore db;
 
     @Override
     public void onStart() {
@@ -85,7 +84,6 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
         login = view.findViewById(R.id.already_user);
         terms_conditions = view.findViewById(R.id.terms_conditions);
 
-
         // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -118,7 +116,6 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
                 break;
 
             case R.id.already_user:
-
                 // Replace login fragment
                 new Registration().replaceLoginFragment();
                 break;
@@ -132,6 +129,8 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
         String getEmailId = email.getText().toString();
         String getMobileNumber = mobileNumber.getText().toString();
         String getLocation = location.getText().toString();
+
+
         String getPassword = password.getText().toString();
         String getConfirmPassword = confirmPassword.getText().toString();
 
@@ -140,37 +139,25 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
         Matcher m = p.matcher(getEmailId);
 
         // Check if all strings are null or empty
-//        if (getFullName.isEmpty()
-//                || getEmailId.isEmpty()
-//                || getMobileNumber.isEmpty()
-//                || getLocation.isEmpty()
-//                || getPassword.isEmpty()
-//                || getConfirmPassword.isEmpty())
-//                {
-        if (getFullName.equals("") || getFullName.length() == 0
-                || getEmailId.equals("") || getEmailId.length() == 0
-                || getMobileNumber.equals("") || getMobileNumber.length() == 0
-                || getLocation.equals("") || getLocation.length() == 0
-                || getPassword.equals("") || getPassword.length() == 0
-                || getConfirmPassword.equals("")
-                || getConfirmPassword.length() == 0){
-            new CustomToast().Show_Toast(getActivity(), view,
-                    "All fields are required.");
+        if (getFullName.isEmpty()
+                || getEmailId.isEmpty()
+                || getMobileNumber.isEmpty()
+                || getLocation.isEmpty()
+                || getPassword.isEmpty()
+                || getConfirmPassword.isEmpty()) {
+            new CustomToast().Show_Toast(getActivity(), view, "All fields are required.");
         }
         // Check if email id is valid
         else if (!m.find()) {
-            new CustomToast().Show_Toast(getActivity(), view,
-                    "Your Email Id is Invalid.");
+            new CustomToast().Show_Toast(getActivity(), view, "Your Email Id is Invalid.");
         }
         // Check if both passwords match
         else if (!getConfirmPassword.equals(getPassword)) {
-            new CustomToast().Show_Toast(getActivity(), view,
-                    "Both passwords do not match.");
+            new CustomToast().Show_Toast(getActivity(), view, "Both passwords do not match.");
         }
         // Make sure the user has checked the Terms and Conditions checkbox
         else if (!terms_conditions.isChecked()) {
-            new CustomToast().Show_Toast(getActivity(),
-                    view, "Please accept the Terms and Conditions.");
+            new CustomToast().Show_Toast(getActivity(), view, "Please accept the Terms and Conditions.");
         } else {
             // Create user with email and password
             mAuth.createUserWithEmailAndPassword(getEmailId, getPassword)
@@ -187,23 +174,6 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
                                     // Create a new document with the user's ID
                                     DocumentReference userRef = db.collection("User").document(userId);
 
-                                    //Collection reference
-                               //     CollectionReference dbUser = db.collection("Users");
-//                                    UserDetails userDetails = new UserDetails(getFullName,getEmailId,getMobileNumber,getLocation);
-//                                    dbUser.add(userDetails).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                        @Override
-//                                        public void onSuccess(DocumentReference documentReference) {
-//                                            Intent intent = new Intent(getActivity(), MainActivity.class);
-//                                            startActivity(intent);
-//                                            getActivity().finish();
-//                                        }
-//                                    }).addOnFailureListener(new OnFailureListener() {
-//                                        @Override
-//                                        public void onFailure(@NonNull Exception e) {
-//
-//                                        }
-//                                    });
-
                                     // Create a HashMap to store the user information
                                     Map<String, Object> userInfo = new HashMap<>();
                                     userInfo.put("fullName", getFullName);
@@ -219,8 +189,6 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
                                                     // Document successfully written
                                                     Intent intent = new Intent(getActivity(), MainActivity.class);
                                                     startActivity(intent);
-                                                    getActivity().finish();
-//                                                    redirectToMainActivity();
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -240,11 +208,5 @@ public class Signup_Fragment extends Fragment implements OnClickListener {
                     });
         }
     }
-    // Method to redirect to MainActivity
-//    private void redirectToMainActivity() {
-//        Intent intent = new Intent(getActivity(), MainActivity.class);
-//        startActivity(intent);
-//        getActivity().finish();
-//    }
 }
 

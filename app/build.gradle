@@ -6,17 +6,11 @@ plugins {
 
 android {
     compileSdk 33
-    android {
-        // ...
 
-        sourceSets {
-            main {
-                res.srcDirs = ['src/main/res', 'src/main/res/layout']
-            }
-        }
+    packagingOptions {
+        exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/LICENSE.md'
     }
-
-
     defaultConfig {
         applicationId "com.example.myapplication"
         minSdk 29
@@ -47,6 +41,7 @@ android {
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //implementation files('libs/your_javamail_jar_filename.jar')
 //    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.google.android.gms:play-services-maps:11.8.0'
     implementation 'com.google.android.gms:play-services-location:11.8.0'
@@ -54,7 +49,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-fragment:2.4.1'
     implementation 'androidx.navigation:navigation-ui:2.4.1'
-    implementation 'androidx.preference:preference:1.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
@@ -81,14 +75,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.2.1'
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.firebase:firebase-firestore:23.0.1'
-    implementation "androidx.navigation:navigation-fragment-ktx:2.4.0"
-    implementation "androidx.navigation:navigation-ui-ktx:2.4.0"
-
-
-    def nav_version ="2.3.0"
-//    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
-//    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
-//    implementation 'com.takiost.fix:preference-v7:25.3.0.0'
+    implementation 'com.google.firebase:firebase-database:20.0.0'
+    implementation 'com.firebaseui:firebase-ui-database:7.2.0'
+    implementation 'com.google.firebase:firebase-firestore:24.0.0'
+    implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'
 
 }
 

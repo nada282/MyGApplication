@@ -15,12 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 public class SupermarketItemList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener ,ItemListAdapter.OnItemClickListener{
 
@@ -64,32 +70,11 @@ public class SupermarketItemList extends AppCompatActivity implements BottomNavi
         supermarketId = intent.getStringExtra("supermarket_id");
         supermarketName = intent.getStringExtra("supermarket_name");
 
-        DatabaseReference supermarketRef = FirebaseDatabase.getInstance().getReference().child("Supermarket");
-        Query query = supermarketRef.orderByChild("name").equalTo(supermarketName);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                        Float ratingValue = childSnapshot.child("rating").getValue(Float.class);
-                        float ratingFloat = ratingValue != null ? ratingValue : 0.0f;
-                        rating.setRating(ratingFloat);
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle the error if needed
-            }
-        });
 
-        rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                updateRating(rating);
-            }
-        });
+
+        rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> updateRating(rating));
+
 
         // Construct the database reference for the services of the selected supermarket
         servicesRef = FirebaseDatabase.getInstance().getReference().child("SuperMarketItems");
@@ -109,6 +94,19 @@ public class SupermarketItemList extends AppCompatActivity implements BottomNavi
         bottom.setItemIconTintList(null);
 
         bottom.setOnNavigationItemSelectedListener(this);
+
+        CollectionReference userRatingCollectionRef = FirebaseFirestore.getInstance().collection("User");
+        DocumentReference userRatingDocRef = userRatingCollectionRef.document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DocumentReference restaurantRatingDocRef = userRatingDocRef.collection("Rating").document(supermarketId);
+        restaurantRatingDocRef.addSnapshotListener((documentSnapshot, e) -> {
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                Float ratingValue = documentSnapshot.getDouble("rating").floatValue();
+                rating.setRating(ratingValue);
+            } else {
+                // If the restaurant doesn't exist in the user's ratings, set the rating to zero
+                rating.setRating(0.0f);
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -123,6 +121,9 @@ public class SupermarketItemList extends AppCompatActivity implements BottomNavi
                 return true;
             }
         });
+
+        rating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> updateRating(rating));
+
     }
 
 
@@ -141,13 +142,25 @@ public class SupermarketItemList extends AppCompatActivity implements BottomNavi
     }
 
     private void updateRating(float rating) {
-        DatabaseReference restaurantRef = FirebaseDatabase.getInstance().getReference().child("Supermarket");
-        restaurantRef.child(supermarketId).child("rating").setValue(rating);
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        DatabaseReference recommendedRef = FirebaseDatabase.getInstance().getReference().child("RecommendedMarket");
-        recommendedRef.child(supermarketId).child("rating").setValue(rating);
-        recommendedRef.child(supermarketId).child("name").setValue(supermarketName);
-        recommendedRef.child(supermarketId).child("image").setValue(Image);
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        CollectionReference userRatingCollectionRef = firestore.collection("User");
+        DocumentReference userRatingDocRef = userRatingCollectionRef.document(userId);
+        DocumentReference restaurantRatingDocRef = userRatingDocRef.collection("Rating").document(supermarketId);
+
+        // Create a new document for the restaurant with the user's rating
+        HashMap<String, Object> ratingData = new HashMap<>();
+        ratingData.put("name", supermarketName);
+        ratingData.put("image", Image);
+        ratingData.put("rating", rating);
+        restaurantRatingDocRef.set(ratingData)
+                .addOnSuccessListener(aVoid -> {
+                    // Rating updated successfully
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the failure to update the rating
+                });
     }
 
     @Override
@@ -184,16 +197,40 @@ public class SupermarketItemList extends AppCompatActivity implements BottomNavi
 
     @Override
     public void onItemClick(DataSnapshot snapshot, int position) {
-        ServicesClass salon = snapshot.getValue(ServicesClass.class);
+        ServicesClass rest = snapshot.getValue(ServicesClass.class);
 
-        Intent intent = new Intent(SupermarketItemList.this, ServiceDetails.class);
-        intent.putExtra("id", snapshot.getKey());
-        intent.putExtra("name", salon.getName());
-        intent.putExtra("price", salon.getPrice());
-        intent.putExtra("desc", salon.getDescription());
-        intent.putExtra("image", salon.getImage());
+        String id = rest.getId();
+        String itemName = rest.getName();
+        String itemImage = rest.getImage();
+        double price = rest.getPrice();
 
-        // Add any other necessary data as extras
-        startActivity(intent);
+        ServicesClass selectedItem = new ServicesClass(id,itemName, itemImage,price);
+
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        CollectionReference recentlyViewedRef = firestore.collection("User")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())// Replace "userId" with the actual user ID
+                .collection("RecentlyV");
+        DocumentReference documentRef = recentlyViewedRef.document(itemName);
+
+        documentRef.set(selectedItem)
+                .addOnSuccessListener(aVoid -> {
+                    // Successfully added the item to RecentlyV collection
+                    // Proceed with starting the ServiceDetails activity
+                    Intent intent = new Intent(SupermarketItemList.this, ServiceDetails.class);
+                    intent.putExtra("id", snapshot.getKey());
+                    intent.putExtra("name", rest.getName());
+                    intent.putExtra("price", rest.getPrice());
+                    intent.putExtra("desc", rest.getDescription());
+                    intent.putExtra("image", rest.getImage());
+
+                    // Add any other necessary data as extras
+                    startActivity(intent);
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the failure to add the item to RecentlyV collection
+                    // Display an error message or take appropriate action
+                });
     }
+
 }

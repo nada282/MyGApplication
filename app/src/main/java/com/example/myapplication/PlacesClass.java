@@ -2,6 +2,16 @@ package com.example.myapplication;
 
 public class PlacesClass {
     private String name;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
     private String image;
 
     public float getRating() {
@@ -18,6 +28,7 @@ public class PlacesClass {
     public PlacesClass(){
 
     }
+
 
     public String getName() {
         return name;
@@ -39,7 +50,11 @@ public class PlacesClass {
         this.name = name;
         this.image = image;
     }
-
+    public PlacesClass(String id,String name, String image) {
+        this.id=id;
+        this.name = name;
+        this.image = image;
+    }
 
 
 

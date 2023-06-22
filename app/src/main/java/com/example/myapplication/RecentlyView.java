@@ -3,7 +3,7 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ImageButton;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,41 +11,53 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class FavouriteList extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, UserAdapter.OnItemClickListener {
+import java.util.ArrayList;
+import java.util.List;
 
-    private BottomNavigationView bottom;
+public class RecentlyView extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, UserAdapter.OnItemClickListener {
+
     private RecyclerView recyclerView;
-    private UserAdapter favAdapter;
+    private BottomNavigationView bottom;
+    private UserAdapter adapter;
+
+   // private List<PlacesClass> recentlyViewedList;
+    private SearchView searchView;
+    private CollectionReference recentlyViewedRef;
+    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favourite_list);
+        setContentView(R.layout.activity_recently_view);
 
-        recyclerView = findViewById(R.id.Favourite_recycler);
+        recyclerView = findViewById(R.id.Recently_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference favoritesRef = db.collection("User")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .collection("favorite");
+                .collection("RecentlyV");
 
         FirestoreRecyclerOptions<ServicesClass> options =
                 new FirestoreRecyclerOptions.Builder<ServicesClass>()
                         .setQuery(favoritesRef, ServicesClass.class)
                         .build();
 
-        favAdapter = new UserAdapter(options);
-        favAdapter.setOnItemClickListener(this);
+        adapter = new UserAdapter(options);
+        adapter.setOnItemClickListener(this);
 
-        recyclerView.setAdapter(favAdapter);
+        recyclerView.setAdapter(adapter);
 
         bottom = findViewById(R.id.bottom);
         bottom.setItemIconTintList(null);
@@ -55,13 +67,13 @@ public class FavouriteList extends AppCompatActivity implements BottomNavigation
     @Override
     protected void onStart() {
         super.onStart();
-        favAdapter.startListening();
+        adapter.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        favAdapter.stopListening();
+        adapter.stopListening();
     }
 
     @Override
@@ -89,7 +101,7 @@ public class FavouriteList extends AppCompatActivity implements BottomNavigation
         ServicesClass place = snapshot.toObject(ServicesClass.class);
 
         if (place != null) {
-            Intent intent = new Intent(FavouriteList.this, ServiceDetails.class);
+            Intent intent = new Intent(RecentlyView.this, ServiceDetails.class);
             intent.putExtra("id", snapshot.getId());
             intent.putExtra("name", place.getName());
             intent.putExtra("price", place.getPrice());

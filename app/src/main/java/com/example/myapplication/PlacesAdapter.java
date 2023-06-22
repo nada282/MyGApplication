@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
@@ -78,5 +80,6 @@ public class PlacesAdapter extends FirebaseRecyclerAdapter<PlacesClass, PlacesAd
 
     public interface OnItemClickListener {
         void onItemClick(DataSnapshot snapshot, int position);
+
     }
 }
